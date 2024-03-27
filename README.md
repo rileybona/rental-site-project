@@ -1,4 +1,4 @@
-# rental-site-project
+# Rental Site Project
 mod4 project 1
 
 this readme should include API documentation and the database schema for the API project that we're implementing
