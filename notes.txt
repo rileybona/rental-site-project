@@ -1,0 +1,12 @@
+getting started
+    - go into Kanban cards (oops make them)
+    - take the first card, figure out how to achieve the acceptance criteria
+    - mostly an endpoint in your code
+
+
+spots -
+    - pause. create a table. create a model. create some seed data.
+
+
+Testing
+    - test early and often. Every few lines of code. 
