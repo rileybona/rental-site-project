@@ -36,6 +36,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isDate: true,
+        congruency(value) {
+          let start = new Date(this.startDate);
+          let end = new Date(value);
+          
+          if (end < start) throw new Error("end date must be after start date");
+        }
       }
     },
   }, {
