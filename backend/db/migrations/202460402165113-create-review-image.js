@@ -18,6 +18,7 @@ module.exports = {
       reviewId: {
         type: Sequelize.INTEGER,
         references: { model: "Reviews"},
+        onDelete: "CASCADE",
         allowNull: false
       },
       url: {
