@@ -27,7 +27,6 @@ const validateLogin = [
 // Log In
 router.post('/', validateLogin, async (req, res, next) => {
     const { credential, password } = req.body;
-    // console.log('passing in: ', credential, "and pass: ", password);
 
     const user = await User.unscoped().findOne({
         where: {
