@@ -22,14 +22,26 @@ module.exports = (sequelize, DataTypes) => {
        });
       Spot.hasMany(models.SpotImage, {
         foreignKey: "spotId",
-        onDelete: "CASCADE" 
+        onDelete: "CASCADE"
       });
     }
   }
   Spot.init({
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
     ownerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
     },
     address: {
       type: DataTypes.STRING,

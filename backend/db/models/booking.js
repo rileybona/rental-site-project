@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Booking.init({
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
     spotId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -39,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         congruency(value) {
           let start = new Date(this.startDate);
           let end = new Date(value);
-          
+
           if (end < start) throw new Error("end date must be after start date");
         }
       }
