@@ -21,7 +21,7 @@ const validateLogin = [
       .exists({ checkFalsy: true })
       .withMessage('Please provide a password.'),
     handleValidationErrors
-  ];
+];
 
 
 // Log In
