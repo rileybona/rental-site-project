@@ -4,9 +4,11 @@ const router = express.Router();
 
 const { Op } = require('sequelize');
 const { requireAuth } = require('../../utils/auth')
+
 const { Review } = require('../../db/models');
 const { SpotImage } = require('../../db/models');
 const { Spot } = require('../../db/models');
+const { User } = require('../../db/models');
 
 const { handleValidationErrors } = require('../../utils/validation');
 
@@ -96,9 +98,54 @@ router.get('/current', requireAuth, async (req, res) => {
         setPreviewImage(Spot);
     });
 
-    // return the user's spots ! 
+    // return the user's spots !
     res.json(spots);
-})
+});
+
+// GET A SPOT BY SPOT ID
+
+router.get('/:spotId', async (req, res, next) => {
+    // get the spot, henny
+    const thisSpot = await Spot.findOne({
+        where: {
+            id: req.params.spotId
+        },
+        include: [{
+            model: Review,
+        }, {
+            model: SpotImage,
+         }, {
+            model: User
+         }],
+    });
+
+    // generate an error if there's no spot with this id
+    if (!thisSpot) {
+        const err = new Error;
+        err.status = 404;
+        err.message = "No spot exists with the provided id";
+        next(err);
+    };
+
+    // create a numReviews variable
+    let reviews = thisSpot.Reviews;
+    let numReviews = reviews.length;
+
+    // calculate average rating of reviews
+    let reviewTotalStars = reviews.reduce((total, review) => total + review.stars, 0);
+    let avgStarRating = reviewTotalStars / numReviews;
+
+    // remove the reviews array
+    delete thisSpot.dataValues.Reviews;
+
+    // send the response object
+    res.json({
+        numReviews,
+        avgStarRating,
+        ...thisSpot.toJSON()
+    });
+
+});
 
 
 // CREATE A SPOT
