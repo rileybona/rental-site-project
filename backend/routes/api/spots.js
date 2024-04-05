@@ -208,7 +208,7 @@ router.post('/', requireAuth, validateSpotPost, async (req, res) => {
 router.put('/:spotId', requireAuth, validateSpotPost, async (req, res, next) => {
     // find the spot in question
     const spot = await Spot.findByPk(req.params.spotId);
-    console.log(spot);
+    // console.log(spot);
 
     // generate 404 if there is no such spot
     if (!spot) {
@@ -243,7 +243,50 @@ router.put('/:spotId', requireAuth, validateSpotPost, async (req, res, next) => 
     await spot.save();
 
     res.json(spot);
-})
+});
+
+
+
+// ADD IMAGE TO SPOT BY SPOT ID
+
+router.post('/:spotId/images', requireAuth, async (req, res, next) => {
+     // find the spot in question
+     const spot = await Spot.findByPk(req.params.spotId);
+    //  console.log(spot);
+
+     // generate 404 if there is no such spot
+     if (!spot) {
+         const err = new Error;
+         err.status = 404;
+         err.message = "there is no such spot!";
+         return next(err);
+     }
+
+     // generate an error if user does not own this spot
+     const { user } = req;
+     if (spot.ownerId != user.id) {
+         const err = new Error;
+         err.status = 401;
+         err.message = "You are not authorized to edit this spot.";
+         return next(err);
+     }
+
+     // otherwise, add image to this spot
+     const { url, preview } = req.body;
+     const spotId = spot.id;
+
+     const image = await SpotImage.create({ spotId, url, preview });
+
+     console.log(image);
+
+     const cleanImage = {
+        id: image.id,
+        url: image.url,
+        preview: image.preview
+     };
+
+     res.json(cleanImage);
+});
 
 
 module.exports = router;
