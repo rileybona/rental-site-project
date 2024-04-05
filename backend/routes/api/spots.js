@@ -114,8 +114,11 @@ router.get('/:spotId', async (req, res, next) => {
             model: Review,
         }, {
             model: SpotImage,
+            attributes: {
+                exclude: ['spotId', 'createdAt', 'updatedAt']
+            }
          }, {
-            model: User
+            model: User,
          }],
     });
 
@@ -137,6 +140,15 @@ router.get('/:spotId', async (req, res, next) => {
 
     // remove the reviews array
     delete thisSpot.dataValues.Reviews;
+
+    // clean up user response object
+    const spotUser = thisSpot.User;
+    const cleanUser = {
+        id: spotUser.id,
+        firstName: spotUser.firstName,
+        lastName: spotUser.lastName,
+    }
+    thisSpot.dataValues.User = cleanUser;
 
     // send the response object
     res.json({
