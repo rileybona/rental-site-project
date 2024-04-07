@@ -274,8 +274,6 @@ router.put('/:spotId', requireAuth, validateSpotPost, async (req, res, next) => 
 
 // ADD IMAGE TO SPOT BY SPOT ID
 
-// validator
-
 router.post('/:spotId/images', requireAuth, async (req, res, next) => {
      // find the spot in question
      const spot = await Spot.findByPk(req.params.spotId);
@@ -408,22 +406,54 @@ router.get('/:spotId/reviews', async (req, res, next) => {
 const validateReview = [
     check('review')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a valid review.'),
+        .withMessage('Review text is required'),
+    check('stars')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .custom((value) => {
+            return (value >= 1 && value <= 5);
+        })
+        .withMessage('Stars must be an integer between 1 and 5'),
+    handleValidationErrors
 ]
 
-router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
+router.post('/:spotId/reviews', validateReview, requireAuth, async (req, res, next) => {
     // find spot
-    const spot = await Spot.findByPk(req.params.spotId);
+    const spot = await Spot.findByPk(req.params.spotId, {
+        include: [{
+            model: Review
+        }]
+    });
     // create error if there is not spot with that id
     if (!spot) {
         const err = new Error;
         err.status = 404;
         err.message = "Spot couldn't be found";
+        return next(err);
     };
 
+    // create an error if this user has already made a review for this spot
+    const { user } = req;
+    const userId = user.id;
+
+    spot.Reviews.forEach((review) => {
+        if (review.userId == user.id) {
+            const err = new Error;
+            err.status = 403;
+            err.message = "User already has a review for this spot"
+            return next(err);
+        }
+    });
+
     //otherwise, create the spot
+
+    const spotId = parseInt(req.params.spotId);
     const { review, stars } = req.body;
 
-})
+    const newReview = await Review.create({ spotId, userId, review, stars });
+
+    res.status(201);
+    return res.json(newReview);
+});
 
 module.exports = router;
