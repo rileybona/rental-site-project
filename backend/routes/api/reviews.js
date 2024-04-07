@@ -100,5 +100,55 @@ router.get('/current', requireAuth, async (req, res, next) => {
 });
 
 
+// ADD IMAGE TO A REVIEW BY REVIEW ID
+
+router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
+    const review = await Review.findByPk(req.params.reviewId, {
+        include: [{
+            model: ReviewImage
+        }]
+    });
+
+    // ensure review exists 404
+    if (!review) {
+        const err = new Error;
+        err.status = 404;
+        err.message = "Review couldn't be found";
+        return next(err);
+    };
+
+    // ensure current user owns this review 401?
+    const { user } = req;
+    if (review.userId != user.id) {
+        const err = new Error;
+        err.status = 401;
+        err.message = "You are not authorized to edit this review";
+        return next(err);
+    };
+
+    // ensure the review does not have max 10 images 403
+    const imageCount = review.ReviewImages.length;
+    console.log(imageCount);
+    if (imageCount >= 10) {
+        const err = new Error;
+        err.status = 403;
+        err.message = "Maximum number of images for this resources was reached";
+        return next(err);
+    }
+
+    // if no errors, add the image !
+    const { url } = req.body;
+    const img = await ReviewImage.create({
+        reviewId: review.id,
+        url: url
+    });
+
+    const cleanImg = {};
+    cleanImg.id = img.id;
+    cleanImg.url = img.url;
+
+    res.json(cleanImg);
+
+});
 
 module.exports = router;
