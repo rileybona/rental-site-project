@@ -114,8 +114,11 @@ router.get('/:spotId', async (req, res, next) => {
             model: Review,
         }, {
             model: SpotImage,
+            attributes: {
+                exclude: ['spotId', 'createdAt', 'updatedAt']
+            }
          }, {
-            model: User
+            model: User, as: "Owner"
          }],
     });
 
@@ -134,9 +137,23 @@ router.get('/:spotId', async (req, res, next) => {
     // calculate average rating of reviews
     let reviewTotalStars = reviews.reduce((total, review) => total + review.stars, 0);
     let avgStarRating = reviewTotalStars / numReviews;
+    // edge case for 0 reviews
+    if (numReviews === 0) {
+        avgStarRating = "This spot has no reviews yet."
+    };
 
     // remove the reviews array
     delete thisSpot.dataValues.Reviews;
+
+    // clean up user response object
+    const spotOwner = thisSpot.Owner;
+    const cleanOwner = {
+        id: spotOwner.id,
+        firstName: spotOwner.firstName,
+        lastName: spotOwner.lastName,
+    }
+    thisSpot.dataValues.Owner = cleanOwner;
+
 
     // send the response object
     res.json({
@@ -162,7 +179,6 @@ const validateSpotPost = [
     check('state')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .isAlpha()
         .withMessage('Please provide a valid state'),
     check('country')
         .exists({ checkFalsy: true })
@@ -171,15 +187,22 @@ const validateSpotPost = [
     check('lat')
         .exists({ checkFalsy: true })
         .isFloat()
-        .withMessage('Please provide a valid latitude'),
+        .custom((value) => {
+            return (value > -90 && value < 90)
+        })
+        .withMessage('Latitude must be within -90 and 90'),
     check('lng')
         .exists({ checkFalsy: true })
         .isFloat()
-        .withMessage('Please provide a valid longitude'),
+        .custom((value) => {
+            return (value > -180 && value < 180)
+        })
+        .withMessage('Longitude must be within -180 and 180'),
     check('name')
         .exists({ checkFalsy: true })
         .notEmpty()
-        .withMessage('Please provide a valid name.'),
+        .isLength({ max: 50 })
+        .withMessage('Name must be less than 50 characters'),
     check('description')
         .exists({ checkFalsy: true })
         .notEmpty()
@@ -198,6 +221,7 @@ router.post('/', requireAuth, validateSpotPost, async (req, res) => {
 
     const spot = await Spot.create({ ownerId, address, city, state, country, lat, lng, name, description, price });
 
+    res.status(201);
     res.json(spot);
 });
 
