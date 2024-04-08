@@ -4,6 +4,7 @@ const router = express.Router();
 
 const { Op } = require('sequelize');
 const { requireAuth } = require('../../utils/auth')
+const { handleValidationErrors } = require('../../utils/validation');
 
 const { Review } = require('../../db/models');
 const { SpotImage } = require('../../db/models');
@@ -150,5 +151,54 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     res.json(cleanImg);
 
 });
+
+// EDIT A REVIEW
+
+const validateReview = [
+    check('review')
+        .exists({ checkFalsy: true })
+        .withMessage('Review text is required'),
+    check('stars')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .custom((value) => {
+            return (value >= 1 && value <= 5);
+        })
+        .withMessage('Stars must be an integer between 1 and 5'),
+    handleValidationErrors
+]
+
+router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => {
+    // find the review
+    const theReview = await Review.findByPk(req.params.reviewId);
+
+    // create error if it does not exist
+    if (!theReview) {
+        const err = new Error;
+        err.status = 404;
+        err.message = "Review couldn't be found";
+        return next(err);
+    };
+
+    // create error if current user does not own this review
+    const { user } = req;
+    if (theReview.userId != user.id) {
+        const err = new Error;
+        err.status = 401;
+        err.message = "You are not authorized to edit this review";
+        return next(err);
+    }
+
+    // update the review object and save.
+    const { review, stars } = req.body;
+
+    theReview.review = review;
+    theReview.stars = stars;
+    theReview.save();
+
+    // return the review object
+    res.json(theReview);
+});
+
 
 module.exports = router;
