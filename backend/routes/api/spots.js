@@ -10,6 +10,7 @@ const { SpotImage } = require('../../db/models');
 const { Spot } = require('../../db/models');
 const { User } = require('../../db/models');
 const { ReviewImage } = require('../../db/models');
+const { Booking } = require('../../db/models');
 
 const { handleValidationErrors } = require('../../utils/validation');
 
@@ -25,7 +26,7 @@ function setAvgStars(Spot) {
         revArray.forEach((rev) => { sum += rev.stars });
         let avg = ( sum / revArray.length);
         avg = avg.toFixed(1);
-        avg = parseFloat(avg); 
+        avg = parseFloat(avg);
         Spot.dataValues.avgRating = avg;
     }
 };
@@ -498,6 +499,114 @@ router.post('/:spotId/reviews', validateReview, requireAuth, async (req, res, ne
 
     res.status(201);
     return res.json(newReview);
+});
+
+
+// GET BOOKING BY SPOT ID
+
+router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
+    // find spot
+    const spot = await Spot.findByPk(req.params.spotId, {
+        include: [{
+            model: Booking
+        }]
+    });
+
+    console.log(spot);
+
+    // create an error if spot does not exist
+    if (!spot) {
+        const err = new Error;
+        err.status = 404;
+        err.message = "Spot couldn't be found";
+        return next(err);
+    }
+
+    // edge case - 0 bookings
+    const bookings = spot.Bookings;
+    // if (!bookings.length) {
+    //     return res.json("There are no bookings for this spot yet");
+    // }
+
+    // determine if current user is owner of the spot
+    const { user } = req;
+    let owner;
+    if (spot.ownerId === user.id) owner = true;
+    else owner = false;
+
+    // create general response
+    if (owner === false) {
+        console.log("----------");
+        console.log("oh no hitting the wrong route")
+        console.log("----------");
+        // return spotId, startDate (formatted), and endDate (formatted) from each booking
+        const length = bookings.length;
+        for (let i = 0; i < length; i++) {
+            let start = new Date(bookings[i].startDate);
+            start = start.toDateString();
+            let end = new Date(bookings[i].endDate);
+            end = end.toDateString();
+
+            const dummy = {};
+            dummy.spotId = bookings[i].spotId;
+            dummy.startDate = start;
+            dummy.endDate = end;
+
+            bookings.shift();
+            bookings.push(dummy);
+        };
+
+       const response = {}
+       response.Bookings = bookings;
+       return res.json(response);
+    }
+
+    // create owner access response
+    if (owner === true) {
+        console.log("hitting the owner route")
+
+        const length = bookings.length;
+        for(let i = 0; i < length; i++) {
+            const bookingUser = await User.findByPk(bookings[i].userId);
+            // start date format
+            let start = new Date(bookings[i].startDate);
+            start = start.toDateString();
+            // end date format
+            let end = new Date(bookings[i].endDate);
+            end = end.toDateString();
+            // createdAt format
+            let created = new Date(booking.createdAt);
+            created = created.toUTCString();
+            // updateAt format
+            let updated = new Date(booking.updatedAt);
+            updated = updated.toUTCString();
+
+            const dummy = {};
+
+            const uzer = {};
+            uzer.id = bookingUser.id;
+            uzer.firstName = bookingUser.firstName;
+            uzer.lastName = bookingUser.lastName;
+
+            dummy.User = uzer;
+            dummy.id = bookings[i].id;
+            dummy.spotId = bookings[i].spotId;
+            dummy.userId = bookings[i].userId;
+            dummy.startDate = start;
+            dummy.endDate = end;
+            dummy.createdAt = created;
+            dummy.updatedAt = updated;
+
+            bookings.shift();
+            bookings.push(dummy);
+        }
+
+        const response = {};
+        response.Bookings = bookings;
+
+        res.json(response);
+    }
+
 });
 
 module.exports = router;
