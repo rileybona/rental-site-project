@@ -606,11 +606,15 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
 });
 
-// CREATE A BOOKING FOR A SPOT BY SPOT IF
+// CREATE A BOOKING FOR A SPOT BY SPOT ID
 
 router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     // find the spot
-    const spot = await Spot.findByPk(req.params.spotId);
+    const spot = await Spot.findByPk(req.params.spotId, {
+        include: [{
+            model: Booking
+        }]
+    });
 
     // ensure spot exists
     if (!spot) {
@@ -631,11 +635,71 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     }
 
     // VALIDATE PARAMS
+    const { startDate, endDate } = req.body;
+
+
+    // create our error stuff
+    const valErr = new Error();
+    let errs = {};
+
+    let paramStart = new Date(startDate);
+    paramStart = paramStart.getTime();
+    let paramEnd = new Date(endDate);
+    paramEnd = paramEnd.getTime();
+    let now = Date.now();
+
+    // ensure start date is before today
+    if (paramStart < now) {
+        errs.startDate = "startDate cannot be in the past";
+        valErr.errors = errs;
+        valErr.status = 400;
+        valErr.message = "Bad Request";
+    }
+    if (paramEnd < paramStart) {
+        errs.startDate = "endDate cannot be before start date";
+        valErr.errors = errs;
+        valErr.status = 400;
+        valErr.message = "Bad Request";
+    }
+    if (valErr.status === 400) return next(valErr);
+
 
     // Ensure there are not conflicts with booking dates
+    const prevBookings = spot.Bookings;
+    // for each existing booking
+    const err = new Error;
+    let errors = {};
+    prevBookings.forEach((booking) => {
+        let start = booking.startDate;
+        start = new Date(start).getTime();
+        // console.log(start);
+        let end = booking.endDate;
+        end = new Date(end).getTime();
+        let st = new Date(startDate).getTime();
+        // console.log(st);
+        let en = new Date(endDate).getTime();
+
+        // check start conflict
+        if (st >= start && st <= end) {
+            console.log(" start date conflict recognized! ");
+            errors.startDate = "Start date conflicts with an existing booking";
+            err.errors = errors;
+            err.status = 403;
+            err.message = "Sorry, this spot is already booked for the specified dates"
+        }
+        // check end conflict
+        if (en >= start && en <= end) {
+            console.log(" end date conflict recognized! ");
+            errors.endDate = "End date conflicts with an existing booking";
+            err.errors = errors;
+            err.status = 403;
+            err.message = "Sorry, this spot is already booked for the specified dates";
+        }
+    });
+    if (err.status = 403) return next(err);
+
 
     // otherwise create the booking dawg
-    const { startDate, endDate } = req.body;
     const userId = user.id;
     const spotId = spot.id;
     const booking = await Booking.create({ spotId, userId, startDate, endDate});
