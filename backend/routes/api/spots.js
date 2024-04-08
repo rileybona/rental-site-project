@@ -512,7 +512,6 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
         }]
     });
 
-    console.log(spot);
 
     // create an error if spot does not exist
     if (!spot) {
@@ -536,9 +535,6 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
     // create general response
     if (owner === false) {
-        console.log("----------");
-        console.log("oh no hitting the wrong route")
-        console.log("----------");
         // return spotId, startDate (formatted), and endDate (formatted) from each booking
         const length = bookings.length;
         for (let i = 0; i < length; i++) {
@@ -575,10 +571,10 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
             let end = new Date(bookings[i].endDate);
             end = end.toDateString();
             // createdAt format
-            let created = new Date(booking.createdAt);
+            let created = new Date(bookings[i].createdAt);
             created = created.toUTCString();
             // updateAt format
-            let updated = new Date(booking.updatedAt);
+            let updated = new Date(bookings[i].updatedAt);
             updated = updated.toUTCString();
 
             const dummy = {};
@@ -597,7 +593,8 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
             dummy.createdAt = created;
             dummy.updatedAt = updated;
 
-            bookings.shift();
+
+            bookings.shift()
             bookings.push(dummy);
         }
 
@@ -608,5 +605,72 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     }
 
 });
+
+// CREATE A BOOKING FOR A SPOT BY SPOT IF
+
+router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
+    // find the spot
+    const spot = await Spot.findByPk(req.params.spotId);
+
+    // ensure spot exists
+    if (!spot) {
+        const err = new Error;
+        err.status = 404;
+        err.message = "Spot couldn't be found";
+        return next(err);
+    }
+
+    // ensure current user does NOT own this spot
+    const { user } = req;
+
+    if (user.id === spot.ownerId) {
+        const err = new Error;
+        err.status = 401;
+        err.message = "You can not create a booking for your own spot!";
+        return next(err);
+    }
+
+    // VALIDATE PARAMS
+
+    // Ensure there are not conflicts with booking dates
+
+    // otherwise create the booking dawg
+    const { startDate, endDate } = req.body;
+    const userId = user.id;
+    const spotId = spot.id;
+    const booking = await Booking.create({ spotId, userId, startDate, endDate});
+
+    // format dates
+      // re format start date
+      let start = new Date(booking.startDate);
+      start = start.toDateString();
+
+      delete booking.dataValues.startDate;
+      booking.dataValues.startDate = start;
+
+      // re format end date
+      let end = new Date(booking.endDate);
+      end = end.toDateString();
+
+      delete booking.dataValues.endDate;
+      booking.dataValues.endDate = end;
+
+      // re format createdAt
+      let created = new Date(booking.createdAt);
+      created = created.toUTCString();
+
+      delete booking.dataValues.createdAt;
+      booking.dataValues.createdAt = created;
+
+      // re format updatedAt
+      let updated= new Date(booking.updatedAt);
+      updated= updated.toUTCString();
+
+      delete booking.dataValues.updatedAt;
+      booking.dataValues.updatedAt = updated;
+
+    // return response object
+    res.json(booking);
+})
 
 module.exports = router;
