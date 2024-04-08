@@ -24,6 +24,8 @@ function setAvgStars(Spot) {
         let sum = 0;
         revArray.forEach((rev) => { sum += rev.stars });
         let avg = ( sum / revArray.length);
+        avg = avg.toFixed(1);
+        avg = parseFloat(avg); 
         Spot.dataValues.avgRating = avg;
     }
 };
@@ -47,13 +49,50 @@ function setPreviewImage(Spot) {
 
 // GET ALL SPOTS
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
+    // create query validations
+    let { page, size } = req.query;
+
+    // handle errors
+    const err = new Error;
+    let errors = {};
+    if (page < 1) {
+        errors.page = "Page must be greater than or equal to 1";
+        err.errors = errors
+        err.status = 400;
+        err.message = "Bad Request";
+    }
+    if (size < 1) {
+        errors.size = "Size must be greater than or equal to 1";
+        err.errors = errors
+        err.status = 400;
+        err.message = "Bad Request";
+    }
+    if (err.status === 400) return next(err);
+
+    page = parseInt(page);
+    size = parseInt(size);
+
+    // handle defaults
+    if (!page || isNaN(page) || page > 10) page = 1;
+    if (!size || isNaN(size) || size > 20) size = 20;
+
+    // create pagination
+    const pagination = {};
+    pagination.limit = size;
+    pagination.offset = size * (page - 1);
+
+
+
+    // add pagination to query [optional add a where object]
     const spots = await Spot.findAll({
         include: [{
             model: Review,
         }, {
             model: SpotImage,
         }],
+
+        ...pagination,
     });
 
     spots.forEach((Spot) => {
@@ -64,7 +103,12 @@ router.get('/', async (req, res) => {
         setPreviewImage(Spot);
     });
 
-    res.json(spots);
+    const Response = {};
+    Response.Spots = spots;
+    Response.page = page;
+    Response.size = size;
+
+    res.json(Response);
 });
 
 
