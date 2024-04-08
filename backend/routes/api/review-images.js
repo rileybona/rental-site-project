@@ -12,9 +12,11 @@ const { ReviewImage } = require('../../db/models');
 
 router.delete('/:imageId', requireAuth, async (req, res, next) => {
     // get the review image
-    const reviewImage = await ReviewImage.findByPk(req.params.imageId);
-
-    console.log(reviewImage);
+    const reviewImage = await ReviewImage.findByPk(req.params.imageId, {
+        include: [{
+            model: Review
+        }]
+    });
 
     // create an error if there is no such image
     if (!reviewImage) {
@@ -24,22 +26,26 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
         return next(err);
     }
 
+
+
+
+
     // create an error if review is not owned by current user
     const { user } = req;
-    const review = await Review.findByPk(reviewImage.reviewId);
+    const correctId = reviewImage.Review.userId;
 
-    if (review.userId !== user.id) {
+    if (correctId != user.id) {
         const err = new Error;
         err.status = 401;
         err.message = 'You are not authorized to delete this image';
+        return next(err);
     }
 
-    
+
     // otherwise, delete the review image
     reviewImage.destroy();
 
-    res.status(200);
-    res.message = 'Successfully deleted image';
+    res.json({ "message": "Successfully deleted" });
 })
 
 

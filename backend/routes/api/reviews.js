@@ -201,4 +201,35 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => 
 });
 
 
+// DELETE A REVIEW
+
+router.delete('/:reviewId', requireAuth, async (req, res, next) => {
+    // get the review
+    const review = await Review.findByPk(req.params.reviewId);
+
+    // create error if there is no such review
+    if (!review) {
+        const err = new Error;
+        err.status = 404;
+        err.message = "Review couldn't be found";
+        return next(err);
+    }
+
+    // create error if current user does not own this review
+    const { user } = req;
+    if (review.userId != user.id) {
+        const err = new Error;
+        err.status = 401;
+        err.message = "You are not authorized to delete this review";
+        return next(err);
+    }
+
+    // else destroy the review
+    review.destroy();
+
+    // return a success message
+    res.json({ "message": "Successfully deleted" });
+});
+
+
 module.exports = router;
