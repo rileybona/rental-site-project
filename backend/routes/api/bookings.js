@@ -239,7 +239,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
 // DELETE A BOOKING
 
 router.delete('/:bookingId', requireAuth, async (req, res, next) => {
-    const booking = Booking.findByPk(req.params.bookingId);
+    const booking = await Booking.findByPk(req.params.bookingId);
     if (!booking) {
         const err = new Error;
         err.status = 404;
