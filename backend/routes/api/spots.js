@@ -463,7 +463,7 @@ const validateReview = [
     handleValidationErrors
 ]
 
-router.post('/:spotId/reviews', validateReview, requireAuth, async (req, res, next) => {
+router.post('/:spotId/reviews', requireAuth, validateReview,  async (req, res, next) => {
     // find spot
     const spot = await Spot.findByPk(req.params.spotId, {
         include: [{
@@ -485,7 +485,7 @@ router.post('/:spotId/reviews', validateReview, requireAuth, async (req, res, ne
     spot.Reviews.forEach((review) => {
         if (review.userId == user.id) {
             const err = new Error;
-            err.status = 403;
+            err.status = 500;
             err.message = "User already has a review for this spot"
             return next(err);
         }
@@ -636,7 +636,7 @@ function validateParams (startDate, endDate) {
     // ensure start & end date are not the same
     if (paramStart === paramEnd) {
         errs.startDate = "startDate cannot be equal to endDate";
-        valErr.erros = errs;
+        valErr.errors = errs;
         valErr.status = 400;
         valErr.message = "Bad Request";
     }
@@ -706,7 +706,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
             bookingErr.message = "Sorry, this spot is already booked for the specified dates";
         }
         // check surrounding conflict
-        if (st <= start && end >= end) {
+        if (st < start && end > end) {
             errors.startDate = "Start date conflicts with an existing booking";
             bookingErr.errors = errors;
             bookingErr.status = 403;
