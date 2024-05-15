@@ -103,6 +103,13 @@ function validateParams (startDate, endDate) {
            valErr.status = 400;
            valErr.message = "Bad Request";
        }
+       // ensure start & end are not the same day
+       if (paramStart === paramEnd) {
+          errs.startDate = "startDate cannot equal endDate";
+          valErr.errors = errs;
+          valErr.status = 400;
+          valErr.message = "Bad Request";
+       }
        if (valErr.status === 400) throw valErr;
    }
 
@@ -202,8 +209,8 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
     endingDay = new Date(endDate);
     endingDay = endingDay.toDateString();
 
-    console.log(startingDay);
-    console.log(endingDay);
+    // console.log(startingDay);
+    // console.log(endingDay);
 
     // console.log(booking);
     booking.dataValues.startDate = startingDay;

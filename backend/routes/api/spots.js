@@ -626,9 +626,17 @@ function validateParams (startDate, endDate) {
         valErr.status = 400;
         valErr.message = "Bad Request";
     }
+    // ensure end date is after start date
     if (paramEnd < paramStart) {
         errs.startDate = "endDate cannot be before start date";
         valErr.errors = errs;
+        valErr.status = 400;
+        valErr.message = "Bad Request";
+    }
+    // ensure start & end date are not the same
+    if (paramStart === paramEnd) {
+        errs.startDate = "startDate cannot be equal to endDate";
+        valErr.erros = errs;
         valErr.status = 400;
         valErr.message = "Bad Request";
     }
@@ -696,6 +704,13 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
             bookingErr.errors = errors;
             bookingErr.status = 403;
             bookingErr.message = "Sorry, this spot is already booked for the specified dates";
+        }
+        // check surrounding conflict
+        if (st <= start && end >= end) {
+            errors.startDate = "Start date conflicts with an existing booking";
+            bookingErr.errors = errors;
+            bookingErr.status = 403;
+            bookingErr.message = "Sorry, the specified dates surround an existing booking"
         }
     });
     if (bookingErr.status === 403) {
