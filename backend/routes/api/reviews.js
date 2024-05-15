@@ -118,11 +118,11 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
         return next(err);
     };
 
-    // ensure current user owns this review 401?
+    // ensure current user owns this review
     const { user } = req;
     if (review.userId != user.id) {
         const err = new Error;
-        err.status = 401;
+        err.status = 403;
         err.message = "You are not authorized to edit this review";
         return next(err);
     };
@@ -184,7 +184,7 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => 
     const { user } = req;
     if (theReview.userId != user.id) {
         const err = new Error;
-        err.status = 401;
+        err.status = 403;
         err.message = "You are not authorized to edit this review";
         return next(err);
     }
@@ -219,7 +219,7 @@ router.delete('/:reviewId', requireAuth, async (req, res, next) => {
     const { user } = req;
     if (review.userId != user.id) {
         const err = new Error;
-        err.status = 401;
+        err.status = 403;
         err.message = "You are not authorized to delete this review";
         return next(err);
     }

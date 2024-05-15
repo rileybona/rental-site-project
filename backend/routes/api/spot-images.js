@@ -33,7 +33,7 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
 
     if ( user.id != spot.ownerId) {
         const err = new Error;
-        err.status = 401;
+        err.status = 403;
         err.message = "You are not authorized to delete this image";
         return next(err);
     };

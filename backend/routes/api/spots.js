@@ -35,8 +35,9 @@ function setPreviewImage(Spot) {
     let imgArray = Spot.dataValues.SpotImages;
     delete Spot.dataValues.SpotImages;
     // console.log(imgArray);
-    // set a default image
-    Spot.dataValues.previewImage = 'https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&w=800';
+
+    // // set a default image
+    // Spot.dataValues.previewImage = 'https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&w=800';
 
     // iterate through images, if one is preview, set preview to that image
     imgArray.forEach((SpotImage) => {
@@ -292,7 +293,7 @@ router.put('/:spotId', requireAuth, validateSpotPost, async (req, res, next) => 
     const { user } = req;
     if (spot.ownerId != user.id) {
         const err = new Error;
-        err.status = 401;
+        err.status = 403;
         err.message = "You are not authorized to edit this spot.";
         return next(err);
     }
@@ -336,7 +337,7 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
      const { user } = req;
      if (spot.ownerId != user.id) {
          const err = new Error;
-         err.status = 401;
+         err.status = 403;
          err.message = "You are not authorized to edit this spot.";
          return next(err);
      }
@@ -378,7 +379,7 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
        const { user } = req;
        if (spot.ownerId != user.id) {
            const err = new Error;
-           err.status = 401;
+           err.status = 403;
            err.message = "You are not authorized to delete this spot.";
            return next(err);
        }
@@ -655,7 +656,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
     if (user.id === spot.ownerId) {
         const err = new Error;
-        err.status = 401;
+        err.status = 403;
         err.message = "You can not create a booking for your own spot!";
         return next(err);
     }

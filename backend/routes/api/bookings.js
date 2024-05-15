@@ -96,6 +96,7 @@ function validateParams (startDate, endDate) {
            valErr.status = 400;
            valErr.message = "Bad Request";
        }
+       // ensure end date is after the start date
        if (paramEnd < paramStart) {
            errs.startDate = "endDate cannot be before start date";
            valErr.errors = errs;
@@ -116,7 +117,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
     const { user } = req;
     if (booking.userId !== user.id) {
         const err = new Error();
-        err.status = 401;
+        err.status = 403;
         err.message = "You are not authorized to edit this booking";
         return next(err);
     }
@@ -149,7 +150,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
 
          // check start conflict
           if (st >= start && st <= end) {
-             console.log(" start date conflict recognized! ");
+            //  console.log(" start date conflict recognized! ");
              errors.startDate = "Start date conflicts with an existing booking";
              bookingErr.errors = errors;
              bookingErr.status = 403;
@@ -157,12 +158,20 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
         }
         // check end conflict
            if (en >= start && en <= end) {
-              console.log(" end date conflict recognized! ");
+            //   console.log(" end date conflict recognized! ");
                errors.endDate = "End date conflicts with an existing booking";
                bookingErr.errors = errors;
                bookingErr.status = 403;
                bookingErr.message = "Sorry, this spot is already booked for the specified dates";
             }
+        // check for 'sorrounding' dates
+            if (st <= start && en >= end) {
+                errors.startDate = "Start date conflicts with an existing booking";
+                bookingErr.errors = errors;
+                bookingErr.status = 403;
+                bookingErr.message = "Sorry, the specified dates surround an existing booking"
+            }
+
 
       if (bookingErr.status === 403) {
         const err = new Error();
@@ -233,7 +242,7 @@ router.delete('/:bookingId', requireAuth, async (req, res, next) => {
     const { user } = req;
     if (booking.userId != user.id) {
         const err = new Error();
-        err.status = 401;
+        err.status = 403;
         err.message = "You are not authorized to delete this booking";
         return next(err);
     }

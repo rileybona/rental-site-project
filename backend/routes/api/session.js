@@ -47,6 +47,7 @@ router.post('/', validateLogin, async (req, res, next) => {
 
     const safeUser = {
         id: user.id,
+        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -72,6 +73,7 @@ router.get(
       if (user) {
         const safeUser = {
           id: user.id,
+          username: user.username,
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
