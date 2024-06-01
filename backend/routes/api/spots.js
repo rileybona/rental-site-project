@@ -348,7 +348,7 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
 
      const image = await SpotImage.create({ spotId, url, preview });
 
-     console.log(image);
+    //  console.log(image);
 
      const cleanImage = {
         id: image.id,
@@ -560,7 +560,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
     // create owner access response
     if (owner === true) {
-        console.log("hitting the owner route")
+        // console.log("hitting the owner route")
 
         const length = bookings.length;
         for(let i = 0; i < length; i++) {
@@ -691,7 +691,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
         // check start conflict
         if (st >= start && st <= end) {
-            console.log(" start date conflict recognized! ");
+            // console.log(" start date conflict recognized! ");
             errors.startDate = "Start date conflicts with an existing booking";
             bookingErr.errors = errors;
             bookingErr.status = 403;
@@ -699,7 +699,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         }
         // check end conflict
         if (en >= start && en <= end) {
-            console.log(" end date conflict recognized! ");
+            // console.log(" end date conflict recognized! ");
             errors.endDate = "End date conflicts with an existing booking";
             bookingErr.errors = errors;
             bookingErr.status = 403;

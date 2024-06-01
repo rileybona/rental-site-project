@@ -93,9 +93,9 @@ router.get('/current', requireAuth, async (req, res, next) => {
         });
 
     // attach reviews array to a larger response object
-    console.log(reviews);
+    // console.log(reviews);
     Response.Reviews = reviews;
-    console.log(Response);
+    // console.log(Response);
 
     res.json(Response);
 });
@@ -129,7 +129,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
 
     // ensure the review does not have max 10 images 403
     const imageCount = review.ReviewImages.length;
-    console.log(imageCount);
+    // console.log(imageCount);
     if (imageCount >= 10) {
         const err = new Error;
         err.status = 403;
