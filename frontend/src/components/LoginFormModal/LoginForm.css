@@ -41,3 +41,8 @@
     border-color:  rgb(109, 187, 255);
     border-radius: 8px;
 }
+
+.login-form-modal form button:disabled {
+    background-color: grey;
+    border-color: grey;
+}

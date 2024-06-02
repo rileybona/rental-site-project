@@ -66,7 +66,7 @@
 }
 
 /* Profile Dropdown Menu */
-.profile-dropdown {
+.login-signup-menu {
   position: absolute;
   right: 20px;
   border: none;
@@ -84,7 +84,7 @@
   justify-content: space-around;
 }
 
-.profile-dropdown li {
+.login-signup-menu li {
   padding-left: 10px;
   color: black;
   height: 40%;
@@ -93,7 +93,7 @@
   justify-content: center;
 }
 
-.profile-dropdown li:hover {
+.login-signup-menu li:hover {
   background-color: rgb(227, 227, 227);
 
 }
@@ -102,3 +102,77 @@
   display: none;
 }
 
+/* reformat menu for logged-in user */
+.user-menu {
+  position: absolute;
+  right: 20px;
+  border: none;
+  background-color: white;
+  box-shadow: 0px 0px 3px 1px rgb(220, 219, 219);
+  border-radius: 8px;
+  text-align: left;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 180px;
+  height: 150px;
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.msg-email {
+  text-align: left;
+  color: black;
+}
+
+#user-msg {
+  font-weight: bold;
+}
+
+#user-email-li {
+  font-size: small;
+  padding-top: 10px;
+
+}
+
+#manage-spots-link {
+  text-decoration: none;
+  align-self: center;
+  height: 20%;
+  width: 100%;
+  padding-bottom: 5px;
+  color: black;
+  font-size: medium;
+}
+
+#manage-spots-li {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  border: solid; 
+  border-color: rgb(198, 195, 195);
+  border-width: 1px;
+  border-right-width: 0;
+  border-left-width: 0;
+  padding-top: 1px;
+  padding-bottom: 9px;
+}
+
+#manage-spots-li:hover {
+  background-color: rgb(227, 227, 227);
+}
+
+.user-menu button {
+  height: 30px;
+  border-radius: 15px;
+  border-width: 1px;
+}
+
+.user-menu button:hover {
+  cursor: pointer;
+}
