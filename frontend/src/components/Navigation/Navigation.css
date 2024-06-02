@@ -1,3 +1,61 @@
+
+/* Home Link / Logo & Profile Button */
+.navBar {
+  height: 52px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  color: red;
+  border: solid;
+  border-color: rgb(224, 220, 220);
+  border-width: 1px;
+}
+
+.home-logo {
+  color:red;
+  padding-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  max-height: 40px;
+  padding-top: 9px;
+}
+
+.home-logo a { 
+  text-decoration: none;
+}
+
+.logo-text {
+  color: blue;
+  font-size: 60;
+}
+
+.profile-button-div {
+  padding-right: 10px;
+}
+
+.profile-button {
+  color: rgba(103, 103, 103, 0.667);
+  background-color: white;
+  /* border: solid;  */
+  /* border-color: grey; */
+  border-radius: 30px;
+  border-width: 1px;
+  border-color: rgb(224, 220, 220);;
+  height: 34px;
+  width: 65px;
+}
+
+.profile-button i {
+  font-size: 34;
+}
+
+/* Profile Dropdown Menu */
 .profile-dropdown {
   position: absolute;
 }

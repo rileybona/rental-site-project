@@ -34,8 +34,8 @@ function Navigation({ isLoaded }) {
     );
 
   return (
-    <ul>
-      <li>
+    <ul className='navBar'>
+      <li className='home-logo'>
         <NavLink to="/">Home</NavLink>
       </li>
       {isLoaded && sessionLinks}
