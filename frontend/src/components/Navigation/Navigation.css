@@ -1,5 +1,5 @@
 
-/* Home Link / Logo & Profile Button */
+/* Home Link -- logo + name logo & Profile Button */
 .navBar {
   height: 52px;
   display: flex;
@@ -11,13 +11,17 @@
   border: solid;
   border-color: rgb(224, 220, 220);
   border-width: 1px;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-left-width: 0px;
 }
 
 .home-logo {
   color:red;
   padding-left: 10px;
+  width: 200px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -31,8 +35,12 @@
 }
 
 .logo-text {
-  color: blue;
-  font-size: 60;
+  width: 100%;
+  color: rgb(46, 155, 244);
+  font-family: "Pacifico", normal;
+  font-weight: 400;
+  font-size: large;
+  font-style: normal;
 }
 
 .profile-button-div {
@@ -51,6 +59,8 @@
   width: 65px;
 }
 
+
+/* TO DO resize icon somehow? place to the right and add hamburger horizontal lines */
 .profile-button i {
   font-size: 34;
 }
@@ -58,8 +68,37 @@
 /* Profile Dropdown Menu */
 .profile-dropdown {
   position: absolute;
+  right: 20px;
+  border: none;
+  background-color: white;
+  box-shadow: 0px 0px 3px 1px rgb(220, 219, 219);
+  border-radius: 8px;
+  text-align: left;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 180px;
+  height: 80px;
+  display: flex; 
+  flex-direction: column-reverse;
+  justify-content: space-around;
+}
+
+.profile-dropdown li {
+  padding-left: 10px;
+  color: black;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile-dropdown li:hover {
+  background-color: rgb(227, 227, 227);
+
 }
 
 .hidden {
   display: none;
 }
+

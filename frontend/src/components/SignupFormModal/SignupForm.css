@@ -1,0 +1,41 @@
+
+.signup-form-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 300px;
+    border-radius: 8px;
+    height: 350px;
+}
+
+.signup-form-modal h1 {
+    font-size: large;
+}
+
+.signup-form-modal form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 80%;
+    height: 100%;
+    padding-bottom: 10px;;
+}
+
+.signup-form-modal form input {
+    max-width: 240px;
+    height: 20px;
+}
+
+.signup-form-modal form button {
+    width: 100%;
+    height: 40px;
+    align-self: center;
+    background-color: rgb(43, 181, 255);
+    border-color:  rgb(109, 187, 255);
+    border-radius: 8px;
+    /* border-color: black; */
+    color: white;
+    box-shadow: 1px 1px 2px rgb(1, 115, 255);
+    /* box-shadow: 1px 1px 2px black; */
+}

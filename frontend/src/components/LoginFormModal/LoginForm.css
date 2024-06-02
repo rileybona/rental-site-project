@@ -1,0 +1,43 @@
+
+#modal-content {
+    border-radius: 8px;
+    top: 80px;
+}
+
+.login-form-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 300px;
+    border-radius: 8px;
+    height: 200px;
+}
+
+.login-form-modal h1 {
+    color: black;
+    text-align: center;
+    font-size: large;
+}
+
+.login-form-modal form {
+    height: 100%;
+    width: 100%;;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.login-form-modal form input {
+    width: 80%;
+}
+
+.form-submit-button {
+    width: 80%;
+    height: 38px;
+    box-shadow: 1px 1px 2px rgb(1, 115, 255);
+    background-color: rgb(43, 181, 255);
+    color: white;
+    border-color:  rgb(109, 187, 255);
+    border-radius: 8px;
+}
