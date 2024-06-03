@@ -10,7 +10,7 @@ function Navigation({ isLoaded }) {
   return (
     <nav className='navBar'>
       <div className='home-logo'>
-        <NavLink to='/'><a href="" className="logo"><img className='logo' src={logo}/></a></NavLink>
+        <NavLink to='/'><img className='logo' src={logo}/></NavLink>
         <NavLink to="/" className='logo-text'>Breeze-Inn</NavLink>
       </div>
       {isLoaded && (

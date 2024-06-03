@@ -6,6 +6,7 @@ import { Outlet, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation-bonus';
 import * as sessionActions from './store/session';
 import { Modal } from './context/Modal';
+import Homepage from './components/Homepage/Homepage';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>Welcome!</h1>
+        element: <Homepage />
       },
       // {
       //   path: '/login',
