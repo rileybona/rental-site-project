@@ -84,3 +84,15 @@
 .login-error-message {
     margin: 0;
 }
+
+/* style demo user button  */
+
+.demo-user-button { 
+    border: none;
+    background-color: white;
+    text-decoration: underline;
+}
+
+.demo-user-button:hover { 
+    cursor: pointer;
+}

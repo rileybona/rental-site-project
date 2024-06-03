@@ -44,7 +44,14 @@
 .signup-form-modal form button:disabled {
     background-color: grey;
     border-color: grey;
+    pointer-events: none;
 }
+
+.signup-form-modal form button:hover {
+    animation: gradient 3s ease-in;
+}
+
+
 
 /* ERROR MESSAGE STYLING  */
 
