@@ -9,12 +9,12 @@ export const UPDATE_SPOT = 'spots/UPDATE_SPOT'
 export const DELETE_SPOT = 'spots/DELETE_SPOT';
 
 // ACTION CREATORS
-export const GetAllSpots = (spots) => ({
+export const loadSpots = (spots) => ({
     type: GET_ALL_SPOTS,
     spots
 });
 
-export const GetSpot = (spot) => ({
+export const getSpot = (spot) => ({
     type: GET_SPOT,
     spot
 });
@@ -46,14 +46,11 @@ export const deleteSpot = (spots) => ({
 export const getAllSpots = () => async (dispatch) => {
     try {
         const response = await csrfFetch('/api/spots');
-        // log response
-        console.log("🚀 ~ getAllSpots ~ response:", response)
         if (response.ok) {
-            const { spots } = await response.json();
-            // log spots
-            console.log("🚀 ~ getAllSpots ~ spots:", spots)
-            dispatch(loadSpots(spots));
-            return response;
+            const res = await response.json();
+            const spots = res.Spots;
+            
+            dispatch(loadSpots(spots))
         } else {
             throw new Error("failed to get spots")
         }
@@ -65,15 +62,13 @@ export const getAllSpots = () => async (dispatch) => {
 }
 
 
-
 // REDUCER
 
 const spotsReducer = (state = {}, action) => {
-    console.log("action in spotsReducer: ", action);
     switch(action.type) {
         case GET_ALL_SPOTS: {
             const newState = {};
-            action.spots.Spots.forEach((spot) => {
+            action.spots.forEach((spot) => {
                 newState[spot.id] = spot;
             });
             return newState;

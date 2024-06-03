@@ -1,3 +1,70 @@
-h1 {
-    color: blue;
+
+/* default formatting - 4 columns */
+.the-great-outer-div-home {
+    display: flex;
+    padding: 40px 150px;
+    flex-wrap: wrap;
+    max-width: 1361px;
 }
+
+.spot-card-home {
+    max-width: 300px;
+    margin-left: 20px
+}
+
+.spotImg-container {
+    max-height: 250px;
+}
+
+.spotImg {
+    width: 300px;
+    height: 250px;
+    border-radius: 8px;
+}
+
+.title-tooltip {
+    visibility: hidden;
+    position: relative;
+    bottom: 100px;
+    left: 150px;
+    background-color: rgba(255, 255, 255, 0.702);
+    color: black;
+    border: none;
+    text-decoration: none;
+}
+
+.spotImg-container:hover .title-tooltip {
+    visibility: visible;
+}
+
+.spot-info-div {
+    display: flex;
+    flex-direction: column;
+}
+
+.star {
+    font-size: small;
+}
+
+.spot-info-div p {
+    margin: 0;
+    text-decoration: none;
+}
+
+.spot-info-upper {
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.spot-info-price {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* TO DO - add media screen for 3, 2, and 1 columns */
