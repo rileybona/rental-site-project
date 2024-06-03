@@ -1,4 +1,5 @@
 
+
 .signup-form-modal {
     display: flex;
     flex-direction: column;
@@ -43,4 +44,26 @@
 .signup-form-modal form button:disabled {
     background-color: grey;
     border-color: grey;
+}
+
+/* ERROR MESSAGE STYLING  */
+
+.password-error {
+    border-color: rgba(255, 116, 116, 0.756);
+    background-color: rgba(243, 156, 156, 0.222);
+}
+
+.email-error {
+    border-color: rgba(255, 116, 116, 0.756);
+    background-color: rgba(243, 156, 156, 0.222);
+}
+
+.username-error {
+    border-color: rgba(255, 116, 116, 0.756);
+    background-color: rgba(243, 156, 156, 0.222);
+}
+
+.signup-form-modal p {
+    color: red;
+    font-size: small;
 }

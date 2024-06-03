@@ -18,6 +18,8 @@ export const login = ({ credential, password }) => async dispatch => {
     body: JSON.stringify({ credential, password })
   });
   const data = await response.json();
+  
+  console.log("🚀 ~ login ~ response:", response)
   dispatch(setUser(data.user));
   return response;
 };

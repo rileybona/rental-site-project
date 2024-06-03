@@ -41,13 +41,20 @@ function SignupFormModal() {
     });
   };
 
+  // create a variable to determine whether or not to disable submit button 
   const allowSubmit = (email && username && firstName && lastName && password && confirmPassword) && (username.length > 3) && (password.length > 5)
+
+  // create dynamic class name to allow error message formatting 
+  const passwordCl = (errors.confirmPassword ? "password-error" : "");
+  const emailCl = (errors.email ? "email-error" : "");
+  const usernameCl = (errors.username ? "username-error" : "");
 
   return (
     <div className='signup-form-modal'>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
           <input
+            className={emailCl}
             type="text"
             placeholder='Email'
             value={email}
@@ -56,6 +63,7 @@ function SignupFormModal() {
           />
         {errors.email && <p>{errors.email}</p>}
           <input
+            className={usernameCl}
             type="text"
             placeholder='Username'
             value={username}
@@ -80,6 +88,7 @@ function SignupFormModal() {
           />
         {errors.lastName && <p>{errors.lastName}</p>}
           <input
+            className={passwordCl}
             type="password"
             placeholder='Password'
             value={password}
@@ -88,6 +97,7 @@ function SignupFormModal() {
           />
         {errors.password && <p>{errors.password}</p>}
           <input
+            className={passwordCl}
             type="password"
             placeholder='Confirm Password'
             value={confirmPassword}

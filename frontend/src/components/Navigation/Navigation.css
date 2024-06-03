@@ -125,6 +125,7 @@
 .msg-email {
   text-align: left;
   color: black;
+  list-style: none;
 }
 
 #user-msg {
