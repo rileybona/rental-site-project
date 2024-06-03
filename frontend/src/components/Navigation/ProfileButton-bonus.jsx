@@ -5,6 +5,8 @@ import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import { NavLink } from 'react-router-dom';
+import { TiThMenu } from "react-icons/ti";
+
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -43,6 +45,7 @@ function ProfileButton({ user }) {
   return (
     <>
       <button className="profile-button" onClick={toggleMenu}>
+        <TiThMenu />
         <i className="fas fa-user-circle fa-2xl navbar-icon" />
       </button>
       <ul className={ulClassName} ref={ulRef}>
