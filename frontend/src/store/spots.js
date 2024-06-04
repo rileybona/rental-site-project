@@ -49,7 +49,7 @@ export const getAllSpots = () => async (dispatch) => {
         if (response.ok) {
             const res = await response.json();
             const spots = res.Spots;
-            
+
             dispatch(loadSpots(spots))
         } else {
             throw new Error("failed to get spots")
@@ -58,7 +58,24 @@ export const getAllSpots = () => async (dispatch) => {
         console.log(err);
         return err;
     }
-   
+}
+
+// get spot by id 
+export const getSpotDetails = (spotId) => async (dispatch) => {
+    try {
+        const response = await csrfFetch(`/api/spots/${spotId}`);
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("thunk data response: ", data);
+            dispatch(getSpot(data));
+        } else {
+            throw new Error("failed to get spot details");
+        }
+    } catch (err) {
+        console.log(err);
+        return err;
+    }
 }
 
 
@@ -71,6 +88,11 @@ const spotsReducer = (state = {}, action) => {
             action.spots.forEach((spot) => {
                 newState[spot.id] = spot;
             });
+            return newState;
+        }
+        case GET_SPOT: {
+            const newState = {};
+            newState.spot = action.spot;
             return newState;
         }
         default: return state;
