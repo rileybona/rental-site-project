@@ -6,6 +6,7 @@ import './Navigation.css';
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
+  const logedIn = (sessionUser !== null);
 
   return (
     <nav className='navBar'>
@@ -13,6 +14,7 @@ function Navigation({ isLoaded }) {
         <NavLink to='/'><img className='logo' src={logo}/></NavLink>
         <NavLink to="/" className='logo-text'>Breeze-Inn</NavLink>
       </div>
+      {logedIn && <NavLink to='/spots/new'>Create a New Spot</NavLink>}
       {isLoaded && (
         <div className='profile-button-div'>
           <ProfileButton user={sessionUser} />

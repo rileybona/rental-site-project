@@ -17,6 +17,7 @@ function Homepage() {
     }, [dispatch]);
 
     return (
+        // check on '.toFixed()' error
         // create large div containing all cards 
         <div className='the-great-outer-div-home'>
             {spotState.map((spot) => (
@@ -29,7 +30,7 @@ function Homepage() {
                         <div className='spot-info-div'>
                             <div className='spot-info-upper'>
                                 <p>{`${spot.city}, ${spot.state}`}</p>
-                                {spot.avgRating !== 'No Ratings' && <p className='spotReview'><BsStarFill className='star'/> {spot.avgRating.toFixed(1)}</p>}
+                                {spot.avgRating !== 'No Ratings' && <p className='spotReview'><BsStarFill className='star'/> {spot.avgRating}</p>}
                                 {spot.avgRating === 'No Ratings' && <p><BsStarFill className='star'/>New</p>}
                             </div>
                             <div className='spot-info-price'>

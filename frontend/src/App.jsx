@@ -8,6 +8,8 @@ import * as sessionActions from './store/session';
 import { Modal } from './context/Modal';
 import Homepage from './components/Homepage/Homepage';
 import SpotDetails from './components/SpotDetails/SpotDetails';
+import CreateSpot from './components/CreateSpot/CreateSpot';
+import ManageSpots from './components/ManageSpots/ManageSpots';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -39,15 +41,19 @@ const router = createBrowserRouter([
       {
         path: '/spots/:spotId',
         element: <SpotDetails />
+      },
+      {
+        path: 'spots/new',
+        element: <CreateSpot />
+      },
+      {
+        path: 'spots/:id/edit',
+        element: <CreateSpot />
+      },
+      {
+        path: '/spots/current',
+        element: <ManageSpots />
       }
-      // {
-      //   path: '/login',
-      //   element: <LoginFormPage />
-      // },
-      // {
-      //   path: 'signup',
-      //   element: <SignupFormPage />
-      // }
     ]
   }
 ]);
