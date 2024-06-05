@@ -138,7 +138,10 @@ function CreateSpot () {
 
     
             // const createdSpot = await 
-            dispatch(createASpot(newSpot, mainImage, spotImages));
+            dispatch(createASpot(newSpot, mainImage, spotImages)).then((createdSpot) => {
+                console.log("~ handleSubmit ~ C.A.S. dispatch is returning: ", createdSpot);
+                navigate(`/spots/${createdSpot.id}`);
+            })
 
             // console.log("handleSubmit--- createdSpot after dispatch: ", createdSpot);
 

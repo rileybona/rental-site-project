@@ -70,6 +70,7 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
             const data = await response.json();
             console.log("~getSpotDetails data obj: ", data);
             dispatch(getSpot(data));
+            return(data);
         } else {
             throw new Error("failed to get spot details");
         }
@@ -82,23 +83,23 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
 // create a spot 
 export const createASpot = (spot, mainImage, images) => async (dispatch) => {
     console.log(" ~createASpot thunk is executing...");
-    console.log("-- folloing spot object read to the function: ", spot);
+    // console.log("-- folloing spot object read to the function: ", spot)
     // translate to array of urls
-    console.log("~create thunk taking in images as: ", images);
+    // console.log("~create thunk taking in images as: ", images);
     const imgLinks = [];
     if (images) {
         const imgArray = Object.values(images);
         imgArray.forEach((url) => {
             if (url.length) imgLinks.push(url);
         })
-        console.log("🚀 ~ createASpot ~ imgLinks:", imgLinks)
+        // console.log("🚀 ~ createASpot ~ imgLinks:", imgLinks)
     }
         
     
 
     spot.price = parseFloat(spot.price);
-    const formatted = JSON.stringify(spot);
-    console.log("spot in JSON.stringify formatting: ", formatted);
+    // const formatted = JSON.stringify(spot);
+    // console.log("spot in JSON.stringify formatting: ", formatted);
 
 
     try {
@@ -110,11 +111,11 @@ export const createASpot = (spot, mainImage, images) => async (dispatch) => {
   
         if (res.ok) {
             const newSpot = await res.json();
-            console.log("🚀 ~ createASpot ~ newSpot:", newSpot)
+            console.log("🚀 ~ createASpot Fetch ~ res.ok");
 
 
             // upload main image 
-            console.log("Entering mainImage POST fetch");
+            console.log("Executing mainImage POST fetch");
             const mainResponse = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
                 method: 'POST',
                 headers: { "Content-Type": "application/json"},
@@ -128,6 +129,7 @@ export const createASpot = (spot, mainImage, images) => async (dispatch) => {
 
             // upload secondary images (if there are any)
             if (images && imgLinks.length) {
+                console.log("~ createASpot ~ executing image array POST fetch");
                 imgLinks.forEach(async (url) => {
                     await csrfFetch(`/api/spots/${newSpot.id}/images`, {
                         method: 'POST',
@@ -137,7 +139,8 @@ export const createASpot = (spot, mainImage, images) => async (dispatch) => {
                 });
             }
             
-            dispatch(createASpot(newSpot));
+            dispatch(createSpot(newSpot));
+            console.log("return the following object back to handleSubmit: ", newSpot);
             return (newSpot);
         } else {
             throw new Error("failed to create spot!")
@@ -169,7 +172,7 @@ export const updateASpot = (spot, spotId) => async dispatch => {
 
     const data = await res.json();
 
-    dispatch(updateSpot(data));
+    dispatch(createSpot(data));
 }
 
 // delete a spot thunk

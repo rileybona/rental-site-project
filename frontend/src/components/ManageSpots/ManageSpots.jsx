@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 // import { BsStarFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { getSpotsByCurrentUser } from "../../store/spots";
+// import { getSpotsByCurrentUser } from "../../store/spots";
+// import useState
 
 function ManageSpots () {
     const dispatch = useDispatch(); 
