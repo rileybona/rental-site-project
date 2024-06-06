@@ -41,8 +41,9 @@ export const deleteSpot = (spots) => ({
 
 
 
-// THUNKS
-// get all spots
+// THUNKS - - - - - - - - -- - -- - - -- - -- - - - - - - - -
+
+// GET ALL SPOTS THUNK 
 export const getAllSpots = () => async (dispatch) => {
     try {
         const response = await csrfFetch('/api/spots');
@@ -60,7 +61,7 @@ export const getAllSpots = () => async (dispatch) => {
     }
 }
 
-// get spot by id 
+// GET SPOT BY ID THUNK 
 export const getSpotDetails = (spotId) => async (dispatch) => {
     try {
         console.log("---- ~getSpotDetails thunk executing ---")
@@ -80,7 +81,7 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
     }
 }
 
-// create a spot 
+// CREATE A SPOT THUNK 
 export const createASpot = (spot, mainImage, images) => async (dispatch) => {
     console.log(" ~createASpot thunk is executing...");
     // console.log("-- folloing spot object read to the function: ", spot)
@@ -154,25 +155,97 @@ export const createASpot = (spot, mainImage, images) => async (dispatch) => {
 
 }
 
-// get all spots by current user thunk [TO-DO try-catch!]
+// GET ALL SPOTS BY USER ID [Thunk]
 export const getSpotsByCurrentUser = () => async (dispatch) => {
-    const res = await csrfFetch('/api/spots/current');
-    const data = await res.json();
+    console.log("~ entering get spots by current user - - ");
 
-    await dispatch(getCurrentUserSpots(data));
+    try {
+        // send fetch to server for spots by current user
+        const res = await csrfFetch('/api/spots/current');
+
+        if (res.ok) {
+            // if response okay, json the response object
+            console.log("/spots/current fetch = res.ok");
+            const data = await res.json();
+
+            console.log("G.S.B.C.U fetch response data object: ", data);
+            // then dispatch object to action creator 
+            dispatch(getCurrentUserSpots(data));
+            return data;
+
+        } else {
+            throw new Error("spots/current fetch failed");
+        }
+    } catch(err) {
+        console.log("getSpotsByUser caught the following error: ", err);
+        return err;
+    }
 }
 
-// update a spot thunk [TO DO ! add IMAGES !!!]
-export const updateASpot = (spot, spotId) => async dispatch => {
-    const res = await csrfFetch(`/api/spots/${spotId}`, {
-        method: 'PUT',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(spot)
-    });
+// update a spot thunk 
+export const updateASpot = (spot, spotId, mainImage, images) => async dispatch => {
+    console.log("hitting update thunk --");
 
-    const data = await res.json();
+    // create array of image urls if there are secondary images
+    const imgLinks = [];
+    if (images) {
+        const imgArray = Object.values(images);
+        imgArray.forEach((url) => {
+            if (url.length) imgLinks.push(url);
+        })
+        console.log("🚀 ~ update thunk ~ imgLinks:", imgLinks)
+    }
 
-    dispatch(createSpot(data));
+    spot.price = parseFloat(spot.price);
+
+    try {
+        const res = await csrfFetch(`/api/spots/${spotId}`, {
+            method: 'PUT',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(spot)
+        });
+
+        if (res.ok) {
+            console.log("update fetch = res.ok!");
+
+            const data = await res.json();
+            console.log("data in update thunk is : ", data);
+
+            // upload main image 
+            console.log("update thnk ~ Executing mainImage POST fetch");
+            console.log("passing in main image as : ", mainImage);
+
+            if (mainImage) {
+                const mainResponse = await csrfFetch(`/api/spots/${data.id}/images`, {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json"},
+                    body: JSON.stringify({ url: mainImage, preview: true})
+                });
+            }
+           
+
+            // upload secondary images (if there are any)
+            if (images && imgLinks.length) {
+                console.log("~ update spot ~ executing image array POST fetch");
+                imgLinks.forEach(async (url) => {
+                    await csrfFetch(`/api/spots/${data.id}/images`, {
+                        method: 'POST',
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ url: url, preview: false})
+                     });
+                });
+            }
+
+            dispatch(updateSpot(data));
+            return data;
+
+        } else {
+            throw new Error("update fetch failed");
+        }
+    } catch(err) {
+        console.log("catching error @ update spot fetch: ", err)
+        return err;
+    }
 }
 
 // delete a spot thunk
@@ -210,8 +283,10 @@ const spotsReducer = (state = {}, action) => {
             return newState;
         }
         case GET_SPOT_BY_USER: {
+            // console.log("reducer case - action: ", action);
+            // console.log("reducer case - action.spots: ", action.spots);
             const newState = {};
-            action.spots.Spots.forEach((spot) => {
+            action.spots.forEach((spot) => {
                 newState[spot.id] = spot;
             });
             return newState;

@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
 import './CreateSpot.css'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { createASpot, getSpotDetails} from '../../store/spots';
+import { useLocation, useNavigate } from 'react-router-dom'
+import { createASpot, getSpotDetails, updateASpot} from '../../store/spots';
 import { useEffect, useState } from 'react';
-// add update spot import
+
 
 function CreateSpot () {
     const dispatch = useDispatch();
@@ -12,11 +12,12 @@ function CreateSpot () {
     const location = useLocation();
     const url = location.pathname;
     const isEdit = (url.includes("edit"));
-    // const oldSpot = useSelector((state) => state.spots.spot);
+    // const oldSpot = useSelector((state) => state);
+    let title = 'Create a New Spot'
     // will be undefined w create route
-    const { spotId } = useParams();
-    // create title variable for dynamic heading
-    let title = 'Create a New Spot';
+    const pathArray = url.split('/');
+    const id = pathArray[2];
+    console.log("id = ", id);
 
     // differentiate between edit & create 
     if(isEdit) {
@@ -78,11 +79,42 @@ function CreateSpot () {
         if(isEdit) {
             console.log("isEdit useEffect executing");
             // dispatch to get a spot with id 
-            const currentSpot = dispatch(getSpotDetails(spotId))
-            console.log(currentSpot);
-            // set states to values in the summoned spot
+            dispatch(getSpotDetails(id)).then((spot) => {
+                console.log("dispatch return obj: ", spot);
+
+                // then set states to return object --> 
+                setAddress(spot.address);
+                setCity(spot.city);
+                setState(spot.state);
+                setCountry(spot.country);
+                setName(spot.name);
+                setDescription(spot.description);
+                setPrice(spot.price);        
+                
+                // handle images 
+                // console.log(spot.SpotImages);
+                let secondaryImages = [];
+                spot.SpotImages.forEach((img) => {
+                    // set the main image if preview is true, or push 2ndaries into array
+                    console.log("img in forEach loop: ", img);
+                    console.log("img.preview in forEach: ", img.preview);
+                    console.log("is image a preview? ", (img.preview === true));
+                    if (img.preview === true) {
+                        console.log("useEffect setting mainImage to the old ways!");
+                        setMainImage(img.url);
+                    } else if (img.url.length) {
+                        secondaryImages.push(img.url);
+                    }
+                });
+                // set states of secondary images if they exist
+                if (secondaryImages[0]) setSpotImageOne(secondaryImages[0]);
+                if (secondaryImages[1]) setSpotImageTwo(secondaryImages[1]);
+                if (secondaryImages[2]) setSpotImageThree(secondaryImages[2]);
+                if (secondaryImages[3]) setSpotImageFour(secondaryImages[3]);
+
+            })
         }
-    }, [dispatch, isEdit, spotId])
+    }, [dispatch, isEdit, id])
 
     // Create HandleSubmit function & dispatch 
     const handlesubmit = async (e) => {
@@ -142,14 +174,6 @@ function CreateSpot () {
                 console.log("~ handleSubmit ~ C.A.S. dispatch is returning: ", createdSpot);
                 navigate(`/spots/${createdSpot.id}`);
             })
-
-            // console.log("handleSubmit--- createdSpot after dispatch: ", createdSpot);
-
-            // navigate to new spot's details page
-            // console.log("dispatch to getSpotDetails...");
-            // dispatch(getSpotDetails(createdSpot));
-            // window.location.reload();
-            // navigate(`/spots/${createdSpot.id}`);
             
         }
 
@@ -157,10 +181,11 @@ function CreateSpot () {
         // dispatch spot object, main image, and image object to updateASpot thunk 
         if (isEdit) {
             console.log("hitting the isEdit path!!!");
-            // const updatedSpot = dispatch(updateASpot(newSpot, mainImage, spotImages));
-
-            // navigate to updated spot's spot-details page 
-            // navigate(`/spots/${updatedSpot.id}`);
+            console.log("handlesub ~ mainImage = ", mainImage);
+            dispatch(updateASpot(newSpot, id, mainImage, spotImages)).then((createdSpot) => {
+                console.log("~ handleSubmit ~ update dispatch is returning: ", createdSpot);
+                navigate(`/spots/${createdSpot.id}`);
+            });
         }
 
     }

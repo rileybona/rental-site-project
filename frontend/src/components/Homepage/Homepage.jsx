@@ -38,7 +38,6 @@ function Homepage() {
                                 <p className='spot-price2'>/night</p>
                             </div>
                         </div>
-
                     </NavLink>
                 </div>
             ))}
