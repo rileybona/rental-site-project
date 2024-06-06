@@ -3,7 +3,8 @@ import { BsStarFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { getSpotsByCurrentUser } from "../../store/spots";
 import { NavLink } from "react-router-dom";
-
+import DeleteSpotModal from "../DeleteSpotModal/DeleteSpotModal";
+import OpenModalButton from "../OpenModalButton";
 
 function ManageSpots () {
     const dispatch = useDispatch(); 
@@ -60,6 +61,8 @@ function ManageSpots () {
                                 <NavLink to={`/spots/${spot.id}/edit`}>
                                     <button>Update</button>
                                 </NavLink>
+
+                                <OpenModalButton buttonText={'Delete'} modalComponent={<DeleteSpotModal spotId={+spot.id} />}/>
                             </div>
                         </div>
                     ))}

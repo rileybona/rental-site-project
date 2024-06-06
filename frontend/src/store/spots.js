@@ -165,10 +165,10 @@ export const getSpotsByCurrentUser = () => async (dispatch) => {
 
         if (res.ok) {
             // if response okay, json the response object
-            console.log("/spots/current fetch = res.ok");
+            // console.log("/spots/current fetch = res.ok");
             const data = await res.json();
 
-            console.log("G.S.B.C.U fetch response data object: ", data);
+            // console.log("G.S.B.C.U fetch response data object: ", data);
             // then dispatch object to action creator 
             dispatch(getCurrentUserSpots(data));
             return data;
@@ -193,7 +193,7 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
         imgArray.forEach((url) => {
             if (url.length) imgLinks.push(url);
         })
-        console.log("🚀 ~ update thunk ~ imgLinks:", imgLinks)
+        // console.log("🚀 ~ update thunk ~ imgLinks:", imgLinks)
     }
 
     spot.price = parseFloat(spot.price);
@@ -209,11 +209,11 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
             console.log("update fetch = res.ok!");
 
             const data = await res.json();
-            console.log("data in update thunk is : ", data);
+            // console.log("data in update thunk is : ", data);
 
             // upload main image 
-            console.log("update thnk ~ Executing mainImage POST fetch");
-            console.log("passing in main image as : ", mainImage);
+            // console.log("update thnk ~ Executing mainImage POST fetch");
+            // console.log("passing in main image as : ", mainImage);
 
             if (mainImage) {
                 const mainResponse = await csrfFetch(`/api/spots/${data.id}/images`, {
@@ -226,7 +226,7 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
 
             // upload secondary images (if there are any)
             if (images && imgLinks.length) {
-                console.log("~ update spot ~ executing image array POST fetch");
+                // console.log("~ update spot ~ executing image array POST fetch");
                 imgLinks.forEach(async (url) => {
                     await csrfFetch(`/api/spots/${data.id}/images`, {
                         method: 'POST',
@@ -250,13 +250,26 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
 
 // delete a spot thunk
 export const deleteASpot = (spotId) => async dispatch => {
-    const res = await csrfFetch(`/api/spots/${spotId}`, {
-        method: 'DELETE'
-    });
+    console.log("entering delete thunk");
 
-    // mm double check this, luv 
-    dispatch(deleteSpot(spotId))
-    return res.json('Spot deleted!');
+    try {
+        const res = await csrfFetch(`/api/spots/${spotId}`, {
+            method: 'DELETE'
+        });
+
+        if (res.ok) {
+            console.log("delete fetch = res.ok");
+            dispatch(deleteSpot(spotId))
+            return await res.json('Spot deleted!');
+        } else {
+            throw new Error("fetch to delete failed!");
+        }
+
+    } catch(err) {
+        console.log("catching err in delete: ", err);
+        return err;
+    }
+    
 }
 
 

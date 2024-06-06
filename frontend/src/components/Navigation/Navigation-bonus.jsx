@@ -14,7 +14,7 @@ function Navigation({ isLoaded }) {
         <NavLink to='/'><img className='logo' src={logo}/></NavLink>
         <NavLink to="/" className='logo-text'>Breeze-Inn</NavLink>
       </div>
-      {logedIn && <NavLink to='/spots/new'>Create a New Spot</NavLink>}
+      {logedIn && <NavLink to='/spots/new' className={'createSpot-nav-button'}>Create a New Spot</NavLink>}
       {isLoaded && (
         <div className='profile-button-div'>
           <ProfileButton user={sessionUser} />

@@ -1,32 +1,54 @@
 
 /* default formatting - 4 columns */
+.page {
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
 .the-great-outer-div-home {
-    display: flex;
-    padding: 40px 150px;
-    flex-wrap: wrap;
-    max-width: 1361px;
+    max-width: 100%;
+    margin-right: 50px;;
+    margin-left: 50px;
+    margin-top: 100px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 30px;
+    grid-row-gap: 20px;
+    overflow: hidden;
 }
 
 .spot-card-home {
     max-width: 300px;
-    margin-left: 20px
+}
+
+/* .spot-card-home:hover {
+    font-weight: bold;
+} */
+
+.nav-link-spot-card {
+    text-decoration: none;
 }
 
 .spotImg-container {
-    max-height: 250px;
+    height: 70%;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 .spotImg {
-    width: 300px;
-    height: 250px;
-    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .title-tooltip {
     visibility: hidden;
     position: relative;
     bottom: 100px;
-    left: 150px;
+    left: 20%;
     background-color: rgba(255, 255, 255, 0.702);
     color: black;
     border: none;
@@ -49,6 +71,7 @@
 .spot-info-div p {
     margin: 0;
     text-decoration: none;
+    font-size: small;
 }
 
 .spot-info-upper {
@@ -57,6 +80,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    color: black;
 }
 
 .spot-info-price {
@@ -65,6 +89,29 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    color: black;
 }
 
-/* TO DO - add media screen for 3, 2, and 1 columns */
+/* add media screen for 3, 2, and 1 columns */
+
+@media screen and (max-width: 1010px){
+    .the-great-outer-div-home {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 739px) {
+    .the-great-outer-div-home {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .the-great-outer-div-home {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .spot-card-home {
+        max-width: 100%;
+    }
+}

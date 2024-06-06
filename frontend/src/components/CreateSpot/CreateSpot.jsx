@@ -248,7 +248,7 @@ function CreateSpot () {
                                 type='text'
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
-                                placeholder='STATE'
+                                placeholder='State'
                                 className='city-state-input'
                             />
                         </label>
@@ -261,7 +261,7 @@ function CreateSpot () {
                         type='text'
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder='Description'
+                        placeholder='Please write at least 30 characters'
                     />
                     {errors.description && <p className='error-msg'>{errors.description}</p>}
                 </div>
@@ -276,13 +276,17 @@ function CreateSpot () {
                     />
                     <label>
                         <div className='price-input-container'>
-                            <p>$</p>
-                            <input
-                                type='text'
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
-                                placeholder='Price per night (USD)'
-                            />
+                            <h3>Set a base price for your spot</h3>
+                            <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
+                            <div className='dollar-plus-input'>
+                                <p>$</p>
+                                <input
+                                    type='text'
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    placeholder='Price per night (USD)'
+                                />
+                            </div>
                         </div>
                     </label>
                     {errors.price && <p className='error-msg'>{errors.price}</p>}
@@ -341,7 +345,7 @@ function CreateSpot () {
                 <div className='submit-button-container'>
                     <button className='submit-button'
                     type="submit"
-                    >Create a Spot</button>
+                    >Create Spot</button>
                 </div>
             </form>
         </div>

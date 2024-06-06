@@ -4,6 +4,7 @@
     overflow: scroll;
     margin-left: 50px;
     margin-right: 50px;
+    margin-top: 80px;
 }
 
 /* IMAGE CONTAINER */
@@ -14,6 +15,7 @@
     flex-direction: row;
     height: 300px;
     padding-right: 10px;
+    box-sizing: border-box;
 }
 
 .primary-image {
@@ -36,7 +38,8 @@
     width: 50%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2%;
+    column-gap: 5px;
+    row-gap: 5px;
     grid-template-rows: repeat(2, 1fr);
 }
 
@@ -91,12 +94,68 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: baseline;
+
 }
 
 .reserveCard-info p {
     padding-left: 5px;
     padding-right: 5px;
+    font-size: small;
 }
+
+.price {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+
+#night {
+    padding: 0;
+}
+
+#bigPrice {
+    padding: 0;
+    margin-left: 10px;
+    font-size: medium;
+}
+
+.reviewinfo {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin-right: 10px;
+}
+
+.reserveButton {
+    height: 30px;
+    width: 200px;
+    margin: 10px;
+    margin-top: 0;
+
+    background-color: rgb(129, 170, 247);
+    color: white;
+    border-color: black;
+    box-shadow: 5px, 2px, 5px, black;
+}
+
+/* fix container spill over with larger screens */
+@media screen and (min-width: 1000px) {
+
+    .secondary-images {
+        overflow: hidden;
+        row-gap: 2px;
+    }
+
+    .quad img {
+        object-fit: cover;
+    }
+}
+
+
+/* optional to-do : add media screen for small screens, move reserve under images and desc under reserve */
+
 
 
 /*  REVIEW FORUM  */
