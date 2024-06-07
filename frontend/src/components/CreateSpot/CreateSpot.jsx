@@ -13,7 +13,8 @@ function CreateSpot () {
     const url = location.pathname;
     const isEdit = (url.includes("edit"));
     // const oldSpot = useSelector((state) => state);
-    let title = 'Create a New Spot'
+    let title = 'Create a New Spot';
+    let buttonText = 'Create Spot';
     // will be undefined w create route
     const pathArray = url.split('/');
     const id = pathArray[2];
@@ -23,6 +24,7 @@ function CreateSpot () {
     if(isEdit) {
         // change title to update
         title = 'Update your Spot';
+        buttonText = 'Update your Spot';
     }
    
     // define all states 
@@ -353,7 +355,7 @@ function CreateSpot () {
                 <div className='submit-button-container'>
                     <button className='submit-button'
                     type="submit"
-                    >Create Spot</button>
+                    >{buttonText}</button>
                 </div>
             </form>
         </div>

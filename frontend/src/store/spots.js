@@ -117,15 +117,16 @@ export const createASpot = (spot, mainImage, images) => async (dispatch) => {
 
             // upload main image 
             console.log("Executing mainImage POST fetch");
-            const mainResponse = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
+            // const mainResponse = 
+            await csrfFetch(`/api/spots/${newSpot.id}/images`, {
                 method: 'POST',
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify({ url: mainImage, preview: true})
             });
 
             // console.log("🚀 ~ createASpot ~ mainResponse:", mainResponse);
-            const mainData = await mainResponse.json();
-            console.log("🚀 ~ createASpot ~ main image POST fetch res Data:", mainData);
+            // const mainData = await mainResponse.json();
+            // console.log("🚀 ~ createASpot ~ main image POST fetch res Data:", mainData);
 
 
             // upload secondary images (if there are any)
@@ -216,7 +217,8 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
             // console.log("passing in main image as : ", mainImage);
 
             if (mainImage) {
-                const mainResponse = await csrfFetch(`/api/spots/${data.id}/images`, {
+                // const mainResponse = 
+                await csrfFetch(`/api/spots/${data.id}/images`, {
                     method: 'POST',
                     headers: { "Content-Type": "application/json"},
                     body: JSON.stringify({ url: mainImage, preview: true})

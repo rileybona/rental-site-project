@@ -31,10 +31,10 @@ const DeleteSpotModal = ({ spotId }) => {
             <form onSubmit={handleDelete} >
                 <h1>Confirm Delete</h1>
                 <div>
-                    <p>Are you sure you want to remove this spot from the listings?</p>
+                    <p>Are you sure you want to remove this spot?</p>
                 </div>
-                <button type="submit" className='delete-spot-button'>Yes - Delete Spot</button>
-                <button onClick={() => closeModal()} className='cancel-button'>No - Keep Spot</button>
+                <button type="submit" className='delete-spot-button'>Yes (Delete Spot)</button>
+                <button onClick={() => closeModal()} className='cancel-button'>No (Keep Spot)</button>
             </form>
         </div>
     )

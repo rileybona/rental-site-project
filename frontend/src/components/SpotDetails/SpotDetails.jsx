@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getSpotDetails } from '../../store/spots';
 import { BsStarFill } from "react-icons/bs";
 import { useParams } from 'react-router-dom';
+import { getAllReviewsThunk } from '../../store/reviews';
 
+
+// HELPER FUNCTION FOR FORMATTING AVG RATING 
 function reviewText (avgRating, numReviews) {
     console.log("calling reviewText helper --");
     let string = '';
@@ -12,8 +15,8 @@ function reviewText (avgRating, numReviews) {
     console.log(avgRating);
     console.log(numReviews);
     if (!avgRating || !numReviews) {
-        console.log("review helper ~ something is undefined");
-        return 'loading...';
+        // console.log("review helper ~ something is undefined");
+        string = 'loading...';
     }
     // change reviews to review if there is only one 
     if (numReviews === 1) {
@@ -25,23 +28,28 @@ function reviewText (avgRating, numReviews) {
         // convert avgRating to int then to Fixed(1)
         let intRating = parseInt(avgRating);
         let fixedRating = intRating.toFixed(1);
-        string = `${fixedRating}   ${numReviews} ${reviews}`;
+        string = `${fixedRating}  ·  ${numReviews} ${reviews}`;
         console.log(string);
     } else {
-        string = 'New   no reviews';
+        string = 'New';
     }
 
     return string;
 }
 
+
+// COMPONENT FUNCTION 
 function SpotDetails () {
     const dispatch = useDispatch();
     const { spotId } = useParams();
     console.log("~SpotDetails ~ spotId from useParams: ", spotId);
     const spotState = useSelector((state) => state.spots.spot);
-    // create a loaded state 
+    const currentUser = useSelector((state) => state.session.user);
+    // create a "loaded" state 
     const [done, setDone] = useState(false);
+    
 
+    // testing
     if(!done) {
         console.log("done state is falsy -- data has not loaded. Mounting component");
     } else {
@@ -49,10 +57,13 @@ function SpotDetails () {
     }
 
 
-
+    // GET SPOTS & GET REVIEWS 
     useEffect(() => {
         console.log("spotDetails component ~ useEffect executing...");
-        dispatch(getSpotDetails(spotId)).then(setDone(true));
+        dispatch(getSpotDetails(spotId)).then(()=> {
+            console.log(".then func calling - dispatch to reviews thunk");
+            dispatch(getAllReviewsThunk(spotId));
+        }).then(setDone(true));
     }, [dispatch]);
 
     console.log("~spotDetails : spotState is reading as: ", spotState);
@@ -62,7 +73,8 @@ function SpotDetails () {
     const handleReserveClick = () => {
         alert("Feature coming soon!");
     }
-    // place spot image urls into an array for rendering
+
+    // SPOT IMAGES 
     let images = [];
     // images = spotState.SpotImages;
 
@@ -73,7 +85,48 @@ function SpotDetails () {
     images[3] = {url: "https://t3.ftcdn.net/jpg/06/01/84/12/360_F_601841290_YQ6SA4KGRPE44WWlUQngWMvB2cqKiWRz.jpg", alt: "pink house exterior"};
     images[4] = {url: "https://t3.ftcdn.net/jpg/06/01/84/12/360_F_601841290_YQ6SA4KGRPE44WWlUQngWMvB2cqKiWRz.jpg", alt: "pink house exterior"};
 
-    // TO-DO: create review state & pull reviews for spot by id
+    // REVIEWS 
+    // dispatch to reviews thunk / create reviews slcie of state
+    const reviewsState = useSelector((state) => Object.values(state.reviews));
+    console.log("~SpotDetails ~ reviewsState: ", reviewsState)
+    // create an array of reviews, re-order them oldest to newest (.reverse()?)
+    const reviewsArr = [...reviewsState].reverse();
+    console.log("reviewsArr: ", reviewsArr);
+
+    // create a date formatting helper function 
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ];
+
+    function formatDates (createdAt) {
+        let string = '';
+        if (createdAt) {
+            let month = new Date(createdAt).getMonth();
+            console.log("month func = ", month);
+            month = months[month];
+            console.log("month after array call: ", month);
+
+            let year = new Date(createdAt).getFullYear();
+
+            string = `${month} ${year}`;
+        }
+        return string; 
+    }
+
+    // check if user has already reviewed this spot 
+    console.log("currentUser = ", currentUser);
+    const hasReviewed = reviewsState.some(review => review.userId === currentUser);
    
     return (
         <>
@@ -129,11 +182,18 @@ function SpotDetails () {
                 </div>
                 <div className='spotDetails-sectionThree'>
                     <div className='spot-details-review-forum-title'>
-                        <h2><BsStarFill />{`${spotState?.avgStarRating} - ${spotState?.numReviews} reviews`}</h2>
-                        <ul>
-                            <li>TO-DO: array.map div element for each review</li>
-                        </ul>
+                        <h2><BsStarFill />{reviewText(spotState?.avgStarRating, spotState?.numReviews)}</h2>
                     </div>
+                    {currentUser && currentUser.id !== spotState?.Owner.id && !hasReviewed && <button>TO-DO: CreateRev Button</button>}
+                    {currentUser && currentUser.id !== spotState?.Owner.id && !reviewsArr.length && <p>Be the first to post a review!</p>}
+                    {reviewsArr.map((review) => (
+                        <div key={review.id} className='review-container'>
+                            <p className='review-name'>{review?.User?.firstName}</p>
+                            <p className='review-date'>{formatDates(review?.createdAt)}</p>
+                            <p className='review-body'>{review?.review}</p>
+                            {review.userId === currentUser.id && <button>TODO add delete button</button>}
+                        </div>
+                    ))}
                 </div>
             </div>
         }
