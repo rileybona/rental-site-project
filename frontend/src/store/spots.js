@@ -169,12 +169,17 @@ export const getSpotsByCurrentUser = () => async (dispatch) => {
             // if response okay, json the response object
             console.log("/spots/current fetch = res.ok");
             const data = await res.json();
-            console.log("G.S.B.U thunk ~ fetch res data");
+            console.log("G.S.B.U thunk ~ fetch res data", data);
 
-            // console.log("G.S.B.C.U fetch response data object: ", data);
-            // then dispatch object to action creator 
-            dispatch(getCurrentUserSpots(data));
-            return data;
+            if (data.message) {
+                dispatch(getCurrentUserSpots([]));
+            } else {
+                // then dispatch object to action creator 
+                dispatch(getCurrentUserSpots(data));
+                return data;
+            }
+
+            
 
         } else {
             throw new Error("spots/current fetch failed");

@@ -28,7 +28,7 @@ function ManageSpots () {
     // const currentUser = useSelector((state) => state.session.user);
     const spotState = useSelector((state) => Object.values(state.spots));
     const [badcode, setBadcode] = useState(1);
-
+    const [divClass, setDivClass] = useState('outerDiv-manageSpots')
 
     // create a useEffect to gen spots by c.u. 
     useEffect(() => {
@@ -40,21 +40,23 @@ function ManageSpots () {
                 console.log("hitting if statement in use effect");
                 console.log("spotArray: ", spotState);
                 setDone(true);
+            } else if (spotState.length === 0) {
+                setDivClass('no-spots-button');
+                setDone(true);
             } else {
                 setBadcode(badcode + 1);
             }
         });
-    }, [dispatch, badcode]);
-
+    }, [dispatch, badcode]);    
 
     return (
         <>
             { !done ? 
                 <h1>loading !!!!</h1>
                 :
-                <div className="page">
+                <div className="manage-page">
                     <h1 className="manage-title">Manage Spots</h1>
-                    <div className="outerDiv-manageSpots">
+                    <div className={divClass}>
                         {(spotState?.length > 0) ? spotState?.map((spot) => (
                             <div className='spot-card-home' key={spot.id}>
                                 <NavLink to={`/spots/${spot.id}`} className='nav-link-spot-card'>
@@ -82,7 +84,9 @@ function ManageSpots () {
                                 </div>
                             </div>
                         )) : 
-                        <NavLink to='/spots/new' className={'createSpot-button-manage'}>Create a New Spot</NavLink>
+                        <div className="button-container-noSpots">
+                            <NavLink id="create-spot-no-spots" to='/spots/new' className={'createSpot-button-manage'}>Create a New Spot</NavLink>
+                        </div>
                         }
                     </div>
                 </div>

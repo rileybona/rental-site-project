@@ -1,4 +1,9 @@
 /* TODO: Add sitewide styles */
 #root {
     box-sizing: border-box;
+    height: 100%;
+}
+
+html {
+    height: 100%;
 }
