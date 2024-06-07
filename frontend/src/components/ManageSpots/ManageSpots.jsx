@@ -55,7 +55,7 @@ function ManageSpots () {
                 <div className="page">
                     <h1 className="manage-title">Manage Spots</h1>
                     <div className="outerDiv-manageSpots">
-                        {(spotState.length > 0) ? spotState.map((spot) => (
+                        {(spotState?.length > 0) ? spotState?.map((spot) => (
                             <div className='spot-card-home' key={spot.id}>
                                 <NavLink to={`/spots/${spot.id}`} className='nav-link-spot-card'>
                                     <div className='spotImg-container'>

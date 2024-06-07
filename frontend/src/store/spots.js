@@ -163,11 +163,13 @@ export const getSpotsByCurrentUser = () => async (dispatch) => {
     try {
         // send fetch to server for spots by current user
         const res = await csrfFetch('/api/spots/current');
+        console.log("res = ", res);
 
         if (res.ok) {
             // if response okay, json the response object
-            // console.log("/spots/current fetch = res.ok");
+            console.log("/spots/current fetch = res.ok");
             const data = await res.json();
+            console.log("G.S.B.U thunk ~ fetch res data");
 
             // console.log("G.S.B.C.U fetch response data object: ", data);
             // then dispatch object to action creator 
@@ -298,8 +300,8 @@ const spotsReducer = (state = {}, action) => {
             return newState;
         }
         case GET_SPOT_BY_USER: {
-            // console.log("reducer case - action: ", action);
-            // console.log("reducer case - action.spots: ", action.spots);
+            console.log("reducer case - action: ", action);
+            console.log("reducer case - action.spots: ", action.spots);
             const newState = {};
             action.spots.forEach((spot) => {
                 newState[spot.id] = spot;
