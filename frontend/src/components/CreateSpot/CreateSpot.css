@@ -1,0 +1,94 @@
+.createSpot-outerDiv {
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+    margin-left: 30%;
+}
+
+.headers {
+    width: 100%;
+}
+
+.createSpot-outerDiv form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+input {
+    width: 100%;
+    height: 27px;
+}
+
+.location-section {
+    width: 100%;
+    box-sizing: border-box;
+    border: solid; 
+    border-top: 0;
+    border-right: 0; 
+    border-left: 0;
+    border-width: 2px;
+    padding-bottom: 20px;
+}
+
+/* .error-msg {
+    visibility: hidden;
+} */
+
+.cite-state-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.spot-description-container {
+    width: 100%;
+    border: solid; 
+    border-top: 0;
+    border-right: 0; 
+    border-left: 0;
+    border-width: 2px;
+    padding-bottom: 20px;
+  
+}   
+
+#desc-textarea {
+    resize: none;
+}
+
+
+.spot-title-container {
+    border: solid; 
+    border-top: 0;
+    border-right: 0; 
+    border-left: 0;
+    border-width: 2px;
+    padding-bottom: 20px;
+}
+
+.price-input-container {
+    border: solid; 
+    border-top: 0;
+    border-right: 0; 
+    border-left: 0;
+    border-width: 2px;
+    padding-bottom: 20px;
+}
+
+.image-input-container {
+    border: solid; 
+    border-top: 0;
+    border-right: 0; 
+    border-left: 0;
+    border-width: 2px;
+    padding-bottom: 20px;
+}
+
+.submit-button-container {
+    margin-top: 20px;
+}

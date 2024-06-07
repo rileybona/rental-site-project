@@ -190,7 +190,7 @@ function CreateSpot () {
 
     }
         
-    // TO-DO : create a dynamic form return for create or edit 
+    // create a dynamic form return for create or edit 
     return (
         <div className='createSpot-outerDiv'>
             <div className='headers'>
@@ -258,6 +258,7 @@ function CreateSpot () {
                     <h3>Describe your place to guests</h3>
                     <p>Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the neighborhood.</p>
                     <textarea 
+                        id='desc-textarea'
                         type='text'
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -265,32 +266,39 @@ function CreateSpot () {
                     />
                     {errors.description && <p className='error-msg'>{errors.description}</p>}
                 </div>
+
                 <div className='spot-title-container'>
                     <h3>Create a title for your spot</h3>
                     <p>Catch guests&apos; attention with a spot title that highlights what makes your place special.</p>
                     <input 
+                        id='titleinput'
                         type='text'
                         value={name}
                         placeholder='Name of your spot'
                         onChange={(e) => setName(e.target.value)}
                     />
-                    <label>
-                        <div className='price-input-container'>
-                            <h3>Set a base price for your spot</h3>
-                            <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
-                            <div className='dollar-plus-input'>
-                                <p>$</p>
-                                <input
-                                    type='text'
-                                    value={price}
-                                    onChange={(e) => setPrice(e.target.value)}
-                                    placeholder='Price per night (USD)'
-                                />
-                            </div>
-                        </div>
-                    </label>
-                    {errors.price && <p className='error-msg'>{errors.price}</p>}
                 </div>
+                <div className='price-input-container'>
+                    <h3>Set a base price for your spot</h3>
+                    <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
+                    <label>
+                         <div className='dollar-plus-input'>
+                            <p>$</p>
+                            <input
+                                type='text'
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                                placeholder='Price per night (USD)'   
+                            />
+                            </div>
+                            {errors.price && <p className='error-msg'>{errors.price}</p>}
+                     </label>
+                        </div>
+
+                  
+                       
+                        
+                   
                 <div className='image-input-container'>
                     <h3>Liven up your spot with photos</h3>
                     <p>Submit a link to at least one photo to publish your spot.</p>
