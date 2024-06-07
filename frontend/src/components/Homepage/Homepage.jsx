@@ -18,6 +18,7 @@ function createRating (avgRating) {
     
     return string;
 }
+
 function Homepage() {
     // define state variables, react hooks
     const dispatch = useDispatch();

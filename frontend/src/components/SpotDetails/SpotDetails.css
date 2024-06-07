@@ -159,3 +159,23 @@
 
 
 /*  REVIEW FORUM  */
+.review-name {
+    font-size: large;
+    color: black;
+    margin-bottom: 0;
+}
+
+.review-date {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: rgb(184, 183, 183);
+}
+
+.review-body {
+    font-size: medium;
+    margin-top: 0;
+}
+
+.review-container {
+    margin-bottom: 20px;
+}

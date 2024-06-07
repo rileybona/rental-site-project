@@ -14,6 +14,8 @@ function CreateReviewModal (spot) {
     const { closeModal } = useModal();
     const dispatch = useDispatch();
     const { spotId } = useParams();
+    const [errorClass, setErrorClass] = useState('hidden');
+
 
     // read store / slices of state
     const allReviews = useSelector(state => Object.values(state.reviews));
@@ -46,6 +48,11 @@ function CreateReviewModal (spot) {
     const submitHandler = async (e) => {
         e.preventDefault();
 
+        if (Object.values(errors).length) {
+            setErrorClass('error-msg');
+            return;
+        }
+
         const newReview = {
             review,
             stars
@@ -70,7 +77,7 @@ function CreateReviewModal (spot) {
             {currentUser && (currentUser !== owner) && !reviewed && (
                 <form onSubmit={submitHandler}>
                     <h1>How was your stay?</h1>
-                    {errors.review && <p className='error-msg'>{errors.review}</p>}
+                    {errors.review && <p className={errorClass}>{errors.review}</p>}
                     <textarea 
                         type='text'
                         value={review}
@@ -78,7 +85,7 @@ function CreateReviewModal (spot) {
                         placeholder='Leave your review here...'
                     />
 
-                    {errors.stars && <p className='error-msg'>{errors.stars}</p>}
+                    {errors.stars && <p className={errorClass}>{errors.stars}</p>}
                     <StarModalComponent stars={stars} setStars={setStars}/>
 
                     <button

@@ -1,0 +1,31 @@
+.page {
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.outerDiv-manageSpots {
+    height: 100%;
+    max-width: 100%;
+    margin-right: 50px;;
+    margin-left: 50px;
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 30px;
+    grid-row-gap: 40px;
+    overflow: hidden;
+}
+
+
+
+.manage-title {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.createSpot-button-manage {
+    align-self: center;
+    margin-top: 100px;
+}
