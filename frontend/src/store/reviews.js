@@ -48,12 +48,48 @@ export const deleteReview = (reviewId) => ({
  }
 
  // POST New Review Thunk
+ export const createReviewThunk = (review, spotId) => async (dispatch) => {
+    try {
+        const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(review)
+        });
 
+        if (res.ok) {
+            console.log("post review fetch = res.ok");
+            const data = await res.json();
+            dispatch(createReview(data));
+            return data;
+        }
 
+    } catch(err) {
+        console.log("C.R.Thunk post fetch caught the following error: ", err);
+        return err; 
+    }
+ }
 
 
  // DELETE Review Thunk 
+ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
+    console.log("entering delete thunk review");
+    try {
+        const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+            method: 'DELETE'
+        });
 
+        if (res.ok) {
+            console.log("rev delete fetch = res.ok");
+            dispatch(deleteReview(reviewId));
+        } else {
+            throw new Error("delete fetch failed");
+        }
+
+    } catch (err) {
+        console.log("catching following error in rev. delete fetch: ", err);
+        return err;
+    }
+ }
 
 
 
@@ -64,6 +100,15 @@ function reviewsReducer(state = {}, action) {
             const newStateObj = {};
             action.reviews.Reviews.forEach((review) => newStateObj[review.id] = review);
             return newStateObj;
+        }
+        case CREATE_REVIEW: {
+            const newState = {...state, [action.review.id]: action.review};
+            return newState;
+        }
+        case DELETE_REVIEW: {
+            const newState = {...state};
+            delete newState[action.reviewId];
+            return newState;
         }
         default: return state;
     }

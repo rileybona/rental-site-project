@@ -5,15 +5,16 @@ import { getSpotDetails } from '../../store/spots';
 import { BsStarFill } from "react-icons/bs";
 import { useParams } from 'react-router-dom';
 import { getAllReviewsThunk } from '../../store/reviews';
-
+import CreateReviewModal from '../CreateReviewModal/CreateReviewModal';
+import OpenModalButton from '../OpenModalButton';
+import DeleteReviewModal from '../DeleteReviewModal/DeleteReviewModal';
 
 // HELPER FUNCTION FOR FORMATTING AVG RATING 
 function reviewText (avgRating, numReviews) {
     console.log("calling reviewText helper --");
     let string = '';
     let reviews = 'reviews'
-    console.log(avgRating);
-    console.log(numReviews);
+
     if (!avgRating || !numReviews) {
         // console.log("review helper ~ something is undefined");
         string = 'loading...';
@@ -26,7 +27,7 @@ function reviewText (avgRating, numReviews) {
     // convert no-review string to 'new' 
     if (numReviews > 0) {
         // convert avgRating to int then to Fixed(1)
-        let intRating = parseInt(avgRating);
+        let intRating = parseFloat(avgRating);
         let fixedRating = intRating.toFixed(1);
         string = `${fixedRating}  ·  ${numReviews} ${reviews}`;
         console.log(string);
@@ -93,7 +94,7 @@ function SpotDetails () {
     const reviewsArr = [...reviewsState].reverse();
     console.log("reviewsArr: ", reviewsArr);
 
-    // create a date formatting helper function 
+    // DATE FORMATTING HELPER 
     const months = [
         'January',
         'February',
@@ -113,9 +114,7 @@ function SpotDetails () {
         let string = '';
         if (createdAt) {
             let month = new Date(createdAt).getMonth();
-            console.log("month func = ", month);
             month = months[month];
-            console.log("month after array call: ", month);
 
             let year = new Date(createdAt).getFullYear();
 
@@ -125,8 +124,7 @@ function SpotDetails () {
     }
 
     // check if user has already reviewed this spot 
-    console.log("currentUser = ", currentUser);
-    const hasReviewed = reviewsState.some(review => review.userId === currentUser);
+    const hasReviewed = reviewsState?.some(review => review.userId === currentUser?.id);
    
     return (
         <>
@@ -184,14 +182,18 @@ function SpotDetails () {
                     <div className='spot-details-review-forum-title'>
                         <h2><BsStarFill />{reviewText(spotState?.avgStarRating, spotState?.numReviews)}</h2>
                     </div>
-                    {currentUser && currentUser.id !== spotState?.Owner.id && !hasReviewed && <button>TO-DO: CreateRev Button</button>}
-                    {currentUser && currentUser.id !== spotState?.Owner.id && !reviewsArr.length && <p>Be the first to post a review!</p>}
-                    {reviewsArr.map((review) => (
+                    {currentUser && currentUser?.id !== spotState?.Owner?.id && !hasReviewed && <OpenModalButton
+                                className='post-review-button'
+                                modalComponent={<CreateReviewModal spot={spotState} />}
+                                buttonText="Post Your Review" /> }
+                    {currentUser && currentUser?.id !== spotState?.Owner?.id && !reviewsArr.length && <p>Be the first to post a review!</p>}
+                    {(reviewsArr.length > 0) && reviewsArr.map((review) => (
                         <div key={review.id} className='review-container'>
                             <p className='review-name'>{review?.User?.firstName}</p>
                             <p className='review-date'>{formatDates(review?.createdAt)}</p>
                             <p className='review-body'>{review?.review}</p>
-                            {review.userId === currentUser.id && <button>TODO add delete button</button>}
+                            {review.userId === currentUser?.id && <DeleteReviewModal reviewId={review.id} spotId={spotState?.id}/>
+                            }
                         </div>
                     ))}
                 </div>
