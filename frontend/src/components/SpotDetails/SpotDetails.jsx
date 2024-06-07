@@ -77,7 +77,10 @@ function SpotDetails () {
 
     // SPOT IMAGES 
     let images = [];
-    images = spotState.SpotImages;
+    if (spotState) {
+        images = spotState.SpotImages;
+    }
+    
 
     // temp hard code for formatting !
     // images[0] = {url: "https://t3.ftcdn.net/jpg/06/01/84/12/360_F_601841290_YQ6SA4KGRPE44WWlUQngWMvB2cqKiWRz.jpg", alt: "pink house exterior"};
@@ -139,7 +142,7 @@ function SpotDetails () {
                     </div>
                     <div className='spotDetails-imageContainer'>
                         <div className='primary-image'>
-                            <img src={images[0].url} alt={images[0].alt} className='primary-image-img'/>
+                            {spotState &&   <img src={images[0].url} alt={images[0].alt} className='primary-image-img'/>}
                         </div>
                         <div className='secondary-images'>
                             <div className='quad'>
