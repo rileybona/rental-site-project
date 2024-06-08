@@ -38,9 +38,10 @@
     width: 50%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 5px;
-    row-gap: 5px;
+    column-gap: 2px;
+    row-gap: 2px;
     grid-template-rows: repeat(2, 1fr);
+    overflow: hidden;
 }
 
 .quad {
@@ -141,7 +142,7 @@
 }
 
 /* fix container spill over with larger screens */
-@media screen and (min-width: 1000px) {
+/* @media screen and (min-width: 1000px) {
 
     .secondary-images {
         overflow: hidden;
@@ -151,7 +152,7 @@
     .quad img {
         object-fit: cover;
     }
-}
+} */
 
 
 /* optional to-do : add media screen for small screens, move reserve under images and desc under reserve */

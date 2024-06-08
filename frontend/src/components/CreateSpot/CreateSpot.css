@@ -74,6 +74,8 @@ input {
 
 #desc-textarea {
     resize: none;
+    height: 100px;
+    width: 100%;
 }
 
 
@@ -106,6 +108,7 @@ input {
 
 .submit-button-container {
     margin-top: 20px;
+    margin-bottom: 50px;
 }
 
 
@@ -123,6 +126,28 @@ input {
 
 
 .createSpot-outerDiv .submit-button {
-    background-color: red;
+    background-color: rgb(57, 176, 255);
     color: white;
+    height: 40px;
+    width: 200px;
+    box-shadow: 2px 2px 2px black;
+    transition: 1s;
+}
+
+.submit-button:hover {
+    background-color: rgb(41, 125, 227);
+    border-width: 1px;
+    cursor: pointer;
+}
+
+
+/* handle char limit */
+.charLimit {
+    font-size: small;
+    color: lightgrey;
+    padding-top: 5px;
+}
+
+.imageUrls {
+    margin-top: 5px;
 }

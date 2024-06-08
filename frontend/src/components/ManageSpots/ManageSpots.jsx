@@ -7,6 +7,7 @@ import DeleteSpotModal from "../DeleteSpotModal/DeleteSpotModal";
 import OpenModalButton from "../OpenModalButton";
 import './ManageSpots.css';
 
+
 function createRating (avgRating) {
     let string = '';
 
@@ -28,7 +29,6 @@ function ManageSpots () {
     // const currentUser = useSelector((state) => state.session.user);
     const spotState = useSelector((state) => Object.values(state.spots));
     const [badcode, setBadcode] = useState(1);
-    const [divClass, setDivClass] = useState('outerDiv-manageSpots')
 
     // create a useEffect to gen spots by c.u. 
     useEffect(() => {
@@ -41,7 +41,6 @@ function ManageSpots () {
                 console.log("spotArray: ", spotState);
                 setDone(true);
             } else if (spotState.length === 0) {
-                setDivClass('no-spots-button');
                 setDone(true);
             } else {
                 setBadcode(badcode + 1);
@@ -52,45 +51,45 @@ function ManageSpots () {
     return (
         <>
             { !done ? 
-                <h1>loading !!!!</h1>
+                <h1 className="loading-screen">loading</h1>
                 :
                 <div className="manage-page">
                     <h1 className="manage-title">Manage Spots</h1>
-                    <div className={divClass}>
-                        {(spotState?.length > 0) ? spotState?.map((spot) => (
-                            <div className='spot-card-home' key={spot.id}>
-                                <NavLink to={`/spots/${spot.id}`} className='nav-link-spot-card'>
-                                    <div className='spotImg-container'>
-                                        <img className='spotImg' src={spot.previewImage} alt='house' />
-                                        <span className='title-tooltip'>{spot.name}</span>
-                                    </div>
-                                    <div className='spot-info-div'>
-                                        <div className='spot-info-upper'>
-                                            <p>{`${spot.city}, ${spot.state}`}</p>
-                                            <p className='spotReview'><BsStarFill className='star'/> {createRating(spot.avgRating)}</p>
+                    {(spotState?.length > 0) ?
+                        <div className='outerDiv-manageSpots'>
+                            {spotState.map((spot) => (
+                                <div className='spot-card-home' key={spot.id}>
+                                    <NavLink to={`/spots/${spot.id}`} className='nav-link-spot-card'>
+                                        <div className='spotImg-container'>
+                                            <img className='spotImg' src={spot.previewImage} alt='house' />
+                                            <span className='title-tooltip'>{spot.name}</span>
                                         </div>
-                                        <div className='spot-info-price'>
-                                            <p className='spot-price'>{`$${spot.price}`}</p>
-                                            <p className='spot-price2'>/night</p>
+                                        <div className='spot-info-div'>
+                                            <div className='spot-info-upper'>
+                                                <p>{`${spot.city}, ${spot.state}`}</p>
+                                                <p className='spotReview'><BsStarFill className='star'/> {createRating(spot.avgRating)}</p>
+                                            </div>
+                                            <div className='spot-info-price'>
+                                                <p className='spot-price'>{`$${spot.price}`}</p>
+                                                <p className='spot-price2'>/night</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </NavLink>
-                                <div className="update-delete-container">
-                                    <NavLink to={`/spots/${spot.id}/edit`}>
-                                        <button>Update</button>
                                     </NavLink>
+                                    <div className="update-delete-container">
+                                        <NavLink to={`/spots/${spot.id}/edit`}>
+                                            <button>Update</button>
+                                        </NavLink>
 
-                                    <OpenModalButton buttonText={'Delete'} modalComponent={<DeleteSpotModal spotId={+spot.id} />}/>
-                                </div>
-                            </div>
-                        )) : 
-                        <div className="button-container-noSpots">
-                            <NavLink id="create-spot-no-spots" to='/spots/new' className={'createSpot-button-manage'}>Create a New Spot</NavLink>
+                                        <OpenModalButton buttonText={'Delete'} modalComponent={<DeleteSpotModal spotId={+spot.id} />}/>
+                                    </div>
+                                </div> 
+                            ))} 
+                        </div> :
+                        <div className="noSpots-button-container">
+                            <NavLink id='create-spot-no-spots' to='/spots/new'>Create a New Spot</NavLink>
                         </div>
-                        }
-                    </div>
-                </div>
-                
+                    }                   
+                </div> 
             }
         </>
     );

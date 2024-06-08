@@ -31,7 +31,7 @@
     margin-top: 100px;
 }
 
-.button-container-noSpots {
+.noSpots-button-container {
     position: absolute;
     left: 20%;
     height: 40px;
@@ -58,7 +58,7 @@
     color: white;
 }
 
-.button-container-noSpots:hover {
+.noSpots-button-container:hover {
     /* background-color:  rgb(35, 95, 235) */
     animation: gradient 5s ease-in;
 }
@@ -94,4 +94,10 @@
     .spot-card-home {
         max-width: 100%;
     }
+}
+
+
+/*  loading msg */
+.loading-screen {
+    color: white;
 }

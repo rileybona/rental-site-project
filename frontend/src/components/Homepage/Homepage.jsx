@@ -11,7 +11,7 @@ function createRating (avgRating) {
     if (avgRating === "This spot has no reviews yet.") {
         string = 'New';
     } else {
-        let intRating = parseInt(avgRating);
+        let intRating = parseFloat(avgRating);
         let fixedRating = intRating.toFixed(1);
         string = `${fixedRating}`;
     }

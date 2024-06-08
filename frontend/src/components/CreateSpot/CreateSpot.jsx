@@ -179,7 +179,8 @@ function CreateSpot () {
             // const createdSpot = await 
             dispatch(createASpot(newSpot, mainImage, spotImages)).then((createdSpot) => {
                 console.log("~ handleSubmit ~ C.A.S. dispatch is returning: ", createdSpot);
-                navigate(`/spots/${createdSpot.id}`);
+                if (createdSpot.id) navigate(`/spots/${createdSpot.id}`);
+                else alert("sorry, that didn't work!");
             })
             
         }
@@ -195,6 +196,15 @@ function CreateSpot () {
             });
         }
 
+    }
+
+    
+    const maxChar = 200;
+    const descriptionHelper = (e) => {
+        const newText = e.target.value;
+        if (newText.length <= maxChar) {
+            setDescription(newText);
+        }
     }
         
     // create a dynamic form return for create or edit 
@@ -265,11 +275,14 @@ function CreateSpot () {
                     <div className='spot-description-container'>
                         <h3>Describe your place to guests</h3>
                         <p>Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the neighborhood.</p>
+                        <div className='charLimit'>
+                            {maxChar - description.length} characters remaining
+                        </div>
                         <textarea 
                             id='desc-textarea'
                             type='text'
                             value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            onChange={descriptionHelper}
                             placeholder='Please write at least 30 characters'
                         />
                         {errors.description && <p className={errorClass}>{errors.description}</p>}
@@ -322,7 +335,8 @@ function CreateSpot () {
                         </label>
                         <div className='secondary-image-inputs'>
                             <label>
-                                <input 
+                                <input
+                                    className='imageUrls' 
                                     type='text'
                                     value={spotImageOne}
                                     onChange={(e) => setSpotImageOne(e.target.value)}
@@ -331,7 +345,8 @@ function CreateSpot () {
                                 {errors.spotImageOne && <p className={errorClass}>{errors.spotImageOne}</p>}
                             </label>
                             <label>
-                                <input 
+                                <input
+                                    className='imageUrls' 
                                     type='text'
                                     value={spotImageTwo}
                                     onChange={(e) => setSpotImageTwo(e.target.value)}
@@ -340,7 +355,8 @@ function CreateSpot () {
                                 {errors.spotImageTwo && <p className={errorClass}>{errors.spotImageTwo}</p>}
                             </label>
                             <label>
-                                <input 
+                                <input
+                                    className='imageUrls' 
                                     type='text'
                                     value={spotImageThree}
                                     onChange={(e) => setSpotImageThree(e.target.value)}
@@ -349,7 +365,8 @@ function CreateSpot () {
                                 {errors.spotImageThree && <p className={errorClass}>{errors.spotImageThree}</p>}
                             </label>
                             <label>
-                                <input 
+                                <input
+                                    className='imageUrls' 
                                     type='text'
                                     value={spotImageFour}
                                     onChange={(e) => setSpotImageFour(e.target.value)}
