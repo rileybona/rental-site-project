@@ -28,7 +28,7 @@ function LoginFormModal() {
   };
 
   // create a dynamic class name for error styling 
-  const loginCl = (errors.length ? "login-error" : "");
+  const loginCl = ((errors.length > 0) ? "login-error" : "");
 
   // create an onClick function to log-in a demo user 
   const demoUserLogIn = async(e) => {
@@ -60,7 +60,7 @@ function LoginFormModal() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        {errors.length && <p className='login-error-message'>{errors}</p>}
+        {(errors.length > 0) && <p className='login-error-message'>{errors}</p>}
         <button className='form-submit-button' type="submit" disabled={password.length < 6 || credential.length < 4}>Log In</button>
         <button className='demo-user-button' type='button' onClick={(e)=> demoUserLogIn(e)}>Demo User</button>
       </form>

@@ -43,20 +43,11 @@ function reviewText (avgRating, numReviews) {
 function SpotDetails () {
     const dispatch = useDispatch();
     const { spotId } = useParams();
-    console.log("~SpotDetails ~ spotId from useParams: ", spotId);
+    // console.log("~SpotDetails ~ spotId from useParams: ", spotId);
     const spotState = useSelector((state) => state.spots.spot);
     const currentUser = useSelector((state) => state.session.user);
     // create a "loaded" state 
     const [done, setDone] = useState(false);
-    
-
-    // testing
-    if(!done) {
-        console.log("done state is falsy -- data has not loaded. Mounting component");
-    } else {
-        console.log("done state reading truthy -- data aquired [allegedly]");
-    }
-
 
     // GET SPOTS & GET REVIEWS 
     useEffect(() => {
@@ -64,10 +55,16 @@ function SpotDetails () {
         dispatch(getSpotDetails(spotId)).then(()=> {
             console.log(".then func calling - dispatch to reviews thunk");
             dispatch(getAllReviewsThunk(spotId));
-        }).then(setDone(true));
+        });
     }, [dispatch]);
 
-    console.log("~spotDetails : spotState is reading as: ", spotState);
+    // CLOSE CIRCUIT WHEN SPOT POPULATED
+    useEffect(() => {
+        setTimeout(() => {
+            if (spotState) setDone(true);
+        }, 20);
+    }, [spotState]);
+
 
 
     // handle reserve button click 
@@ -90,7 +87,7 @@ function SpotDetails () {
     // images[4] = {url: "https://t3.ftcdn.net/jpg/06/01/84/12/360_F_601841290_YQ6SA4KGRPE44WWlUQngWMvB2cqKiWRz.jpg", alt: "pink house exterior"};
 
     // REVIEWS 
-    // dispatch to reviews thunk / create reviews slcie of state
+    // dispatch to reviews thunk / create reviews slice of state
     const reviewsState = useSelector((state) => Object.values(state.reviews));
     console.log("~SpotDetails ~ reviewsState: ", reviewsState)
     // create an array of reviews, re-order them oldest to newest (.reverse()?)

@@ -28,25 +28,19 @@ function ManageSpots () {
     const [done, setDone] = useState(false);
     // const currentUser = useSelector((state) => state.session.user);
     const spotState = useSelector((state) => Object.values(state.spots));
-    const [badcode, setBadcode] = useState(1);
 
-    // create a useEffect to gen spots by c.u. 
+    // create a useEffect to pull spots by c.u. 
     useEffect(() => {
-        console.log("~manageSpots useEffect executing...");
-        // dispatch to G.S.B.Y. thunk then set Donee
-        dispatch(getSpotsByCurrentUser()).then((data) => {
-            console.log("data return from thunk: ", data);
-            if (spotState.length > 0) {
-                console.log("hitting if statement in use effect");
-                console.log("spotArray: ", spotState);
-                setDone(true);
-            } else if (spotState.length === 0) {
-                setDone(true);
-            } else {
-                setBadcode(badcode + 1);
-            }
-        });
-    }, [dispatch, badcode]);    
+        // dispatch to G.S.B.Y. thunk
+        dispatch(getSpotsByCurrentUser());
+    }, [dispatch]);    
+
+    // second useEffect to set 'done' 
+    useEffect(() => {
+        setTimeout(() => {
+            if (spotState.length > 0 || spotState.length === 0) setDone(true);
+        }, 20)
+    }, [spotState]);
 
     return (
         <>

@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { getAllSpots } from '../../store/spots';
 import { BsStarFill } from "react-icons/bs";
 
-
 function createRating (avgRating) {
     let string = '';
 
@@ -25,18 +24,21 @@ function Homepage() {
     const dispatch = useDispatch();
     // define use selector to listen to spots slice of state  
     const spotState = useSelector(state => Object.values(state.spots));
-    // short circuit 
+    // define done state to create short circuit 
     const [done, setDone] = useState(false);
-    const [badCode, setBadeCode] = useState(1);
+
     // create useEffect function that executes on page render 
     useEffect(() => {
         dispatch(getAllSpots());
-        if(spotState.length) {
-            setDone(true);
-        } else {
-            setBadeCode(badCode + 1);
-        }
-    }, [dispatch, badCode]);
+    }, [dispatch]);
+
+    // 2nd useEffect listens to slice of state & closes circuit when populated
+    useEffect(() => {
+        setTimeout(() => {
+            if (spotState.length > 0) setDone(true);
+        }, 20)
+    }, [spotState]);
+
 
     return (
         // create large div containing all cards 
