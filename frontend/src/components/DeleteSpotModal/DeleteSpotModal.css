@@ -1,8 +1,21 @@
 .delete-spot-button {
-    background-color: red;
+    background-color: rgb(255, 83, 83);
     color: white;
+    margin-bottom: 10px;
 }
 
 .cancel-button {
     background-color: darkgrey;
+}
+
+
+.delete-modal-container form {
+    display: flex; 
+    flex-direction: column;
+    margin: 20px;
+}
+
+.delete-modal-container button {
+    height: 40px;
+    box-shadow: 2px 2px 2px black;
 }

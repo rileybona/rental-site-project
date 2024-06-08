@@ -1,7 +1,7 @@
 .manage-page {
     max-width: 100%;
-    height: 800px;
-    overflow-x: hidden;
+    height: 100%;
+    overflow: hidden;
     margin: 0 auto;
     box-sizing: border-box;
 }
@@ -61,4 +61,37 @@
 .button-container-noSpots:hover {
     /* background-color:  rgb(35, 95, 235) */
     animation: gradient 5s ease-in;
+}
+
+.update-delete-container {
+    width: 124px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+/* add media screen for 3, 2, and 1 columns */
+
+@media screen and (max-width: 1010px){
+    .outerDiv-manageSpots {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 739px) {
+    .outerDiv-manageSpots {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .outerDiv-manageSpots {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .spot-card-home {
+        max-width: 100%;
+    }
 }

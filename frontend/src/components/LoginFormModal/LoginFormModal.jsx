@@ -31,7 +31,8 @@ function LoginFormModal() {
   const loginCl = (errors.length ? "login-error" : "");
 
   // create an onClick function to log-in a demo user 
-  const demoUserLogIn = async() => {
+  const demoUserLogIn = async(e) => {
+    e.preventDefault();
     const response = await dispatch(sessionActions.login({ "credential": 'Demo-lition', "password": 'password'}));
     if (response.ok) {
       navigate('/');
@@ -61,7 +62,7 @@ function LoginFormModal() {
           />
         {errors.length && <p className='login-error-message'>{errors}</p>}
         <button className='form-submit-button' type="submit" disabled={password.length < 6 || credential.length < 4}>Log In</button>
-        <button className='demo-user-button' type='demo-user' onClick={demoUserLogIn}>Demo User</button>
+        <button className='demo-user-button' type='button' onClick={(e)=> demoUserLogIn(e)}>Demo User</button>
       </form>
     </div>
   );
