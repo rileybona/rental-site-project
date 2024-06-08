@@ -132,7 +132,7 @@ function SpotDetails () {
     return (
         <>
             { !done ? 
-                <h1>Loading!</h1>
+                <h1 className='loading-screen'>Loading!</h1>
             :
             <div className='spotDetails-outerDiv'>
                 <div className='spotDetails-sectionOne'>
