@@ -64,12 +64,10 @@ export const getAllSpots = () => async (dispatch) => {
 // GET SPOT BY ID THUNK 
 export const getSpotDetails = (spotId) => async (dispatch) => {
     try {
-        console.log("---- ~getSpotDetails thunk executing ---")
         const response = await csrfFetch(`/api/spots/${spotId}`);
 
         if (response.ok) {
             const data = await response.json();
-            console.log("~getSpotDetails data obj: ", data);
             dispatch(getSpot(data));
             return(data);
         } else {
@@ -83,25 +81,18 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
 
 // CREATE A SPOT THUNK 
 export const createASpot = (spot, mainImage, images) => async (dispatch) => {
-    console.log(" ~createASpot thunk is executing...");
-    // console.log("-- folloing spot object read to the function: ", spot)
     // translate to array of urls
-    // console.log("~create thunk taking in images as: ", images);
     const imgLinks = [];
     if (images) {
         const imgArray = Object.values(images);
         imgArray.forEach((url) => {
             if (url.length) imgLinks.push(url);
         })
-        // console.log("🚀 ~ createASpot ~ imgLinks:", imgLinks)
     }
         
     
-
+    // conver price input to float 
     spot.price = parseFloat(spot.price);
-    // const formatted = JSON.stringify(spot);
-    // console.log("spot in JSON.stringify formatting: ", formatted);
-
 
     try {
         const res = await csrfFetch('/api/spots', {
@@ -112,26 +103,16 @@ export const createASpot = (spot, mainImage, images) => async (dispatch) => {
   
         if (res.ok) {
             const newSpot = await res.json();
-            console.log("🚀 ~ createASpot Fetch ~ res.ok");
-
 
             // upload main image 
-            console.log("Executing mainImage POST fetch");
-            // const mainResponse = 
             await csrfFetch(`/api/spots/${newSpot.id}/images`, {
                 method: 'POST',
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify({ url: mainImage, preview: true})
             });
 
-            // console.log("🚀 ~ createASpot ~ mainResponse:", mainResponse);
-            // const mainData = await mainResponse.json();
-            // console.log("🚀 ~ createASpot ~ main image POST fetch res Data:", mainData);
-
-
             // upload secondary images (if there are any)
             if (images && imgLinks.length) {
-                console.log("~ createASpot ~ executing image array POST fetch");
                 imgLinks.forEach(async (url) => {
                     await csrfFetch(`/api/spots/${newSpot.id}/images`, {
                         method: 'POST',
@@ -142,7 +123,6 @@ export const createASpot = (spot, mainImage, images) => async (dispatch) => {
             }
             
             dispatch(createSpot(newSpot));
-            console.log("return the following object back to handleSubmit: ", newSpot);
             return (newSpot);
         } else {
             throw new Error("failed to create spot!")
@@ -158,18 +138,14 @@ export const createASpot = (spot, mainImage, images) => async (dispatch) => {
 
 // GET ALL SPOTS BY USER ID [Thunk]
 export const getSpotsByCurrentUser = () => async (dispatch) => {
-    console.log("~ entering get spots by current user - - ");
 
     try {
         // send fetch to server for spots by current user
         const res = await csrfFetch('/api/spots/current');
-        console.log("res = ", res);
 
         if (res.ok) {
             // if response okay, json the response object
-            console.log("/spots/current fetch = res.ok");
             const data = await res.json();
-            console.log("G.S.B.U thunk ~ fetch res data", data);
 
             if (data.message) {
                 dispatch(getCurrentUserSpots([]));
@@ -192,7 +168,6 @@ export const getSpotsByCurrentUser = () => async (dispatch) => {
 
 // update a spot thunk 
 export const updateASpot = (spot, spotId, mainImage, images) => async dispatch => {
-    console.log("hitting update thunk --");
 
     // create array of image urls if there are secondary images
     const imgLinks = [];
@@ -201,7 +176,6 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
         imgArray.forEach((url) => {
             if (url.length) imgLinks.push(url);
         })
-        // console.log("🚀 ~ update thunk ~ imgLinks:", imgLinks)
     }
 
     spot.price = parseFloat(spot.price);
@@ -214,15 +188,9 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
         });
 
         if (res.ok) {
-            console.log("update fetch = res.ok!");
-
             const data = await res.json();
-            // console.log("data in update thunk is : ", data);
 
             // upload main image 
-            // console.log("update thnk ~ Executing mainImage POST fetch");
-            // console.log("passing in main image as : ", mainImage);
-
             if (mainImage) {
                 // const mainResponse = 
                 await csrfFetch(`/api/spots/${data.id}/images`, {
@@ -235,7 +203,6 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
 
             // upload secondary images (if there are any)
             if (images && imgLinks.length) {
-                // console.log("~ update spot ~ executing image array POST fetch");
                 imgLinks.forEach(async (url) => {
                     await csrfFetch(`/api/spots/${data.id}/images`, {
                         method: 'POST',
@@ -259,7 +226,6 @@ export const updateASpot = (spot, spotId, mainImage, images) => async dispatch =
 
 // delete a spot thunk
 export const deleteASpot = (spotId) => async dispatch => {
-    console.log("entering delete thunk");
 
     try {
         const res = await csrfFetch(`/api/spots/${spotId}`, {
@@ -267,7 +233,6 @@ export const deleteASpot = (spotId) => async dispatch => {
         });
 
         if (res.ok) {
-            console.log("delete fetch = res.ok");
             dispatch(deleteSpot(spotId))
             return await res.json('Spot deleted!');
         } else {
@@ -305,8 +270,6 @@ const spotsReducer = (state = {}, action) => {
             return newState;
         }
         case GET_SPOT_BY_USER: {
-            console.log("reducer case - action: ", action);
-            console.log("reducer case - action.spots: ", action.spots);
             const newState = {};
             action.spots.forEach((spot) => {
                 newState[spot.id] = spot;

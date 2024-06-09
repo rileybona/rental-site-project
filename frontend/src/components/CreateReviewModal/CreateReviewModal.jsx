@@ -9,7 +9,6 @@ import StarModalComponent from './StarModalComponent';
 // import { getSpotDetails } from '../../store/spots';
 
 function CreateReviewModal (spot) {
-    console.log("entering create review modal");
     // declare hooks
     const { closeModal } = useModal();
     const dispatch = useDispatch();
@@ -21,15 +20,9 @@ function CreateReviewModal (spot) {
     const allReviews = useSelector(state => Object.values(state.reviews));
     const currentUser = useSelector(state => state.session.user);
 
-    console.log("current user = ", currentUser);
-    console.log("spot prop = ", spot);
     const owner = spot.spot.Owner;
 
-    // const owner = useSelector(state => state.spots[spotId].Owner.id);
-    console.log("spot owner = ", owner);
-
     const reviewed = allReviews?.some(review => review.userId === currentUser.id);
-    console.log("reviewed = ", reviewed);
 
     // declare states
     const [stars, setStars] = useState(0);

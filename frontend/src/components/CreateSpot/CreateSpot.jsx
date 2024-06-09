@@ -19,7 +19,6 @@ function CreateSpot () {
     // will be undefined w create route
     const pathArray = url.split('/');
     const id = pathArray[2];
-    console.log("id = ", id);
 
     // differentiate between edit & create 
     if(isEdit) {
@@ -80,10 +79,8 @@ function CreateSpot () {
     // create a useEffect to summon current spot if an edit route 
     useEffect(() => {
         if(isEdit) {
-            console.log("isEdit useEffect executing");
             // dispatch to get a spot with id 
             dispatch(getSpotDetails(id)).then((spot) => {
-                console.log("dispatch return obj: ", spot);
 
                 // then set states to return object --> 
                 setAddress(spot.address);
@@ -95,15 +92,10 @@ function CreateSpot () {
                 setPrice(spot.price);        
                 
                 // handle images 
-                // console.log(spot.SpotImages);
                 let secondaryImages = [];
                 spot.SpotImages.forEach((img) => {
                     // set the main image if preview is true, or push 2ndaries into array
-                    console.log("img in forEach loop: ", img);
-                    console.log("img.preview in forEach: ", img.preview);
-                    console.log("is image a preview? ", (img.preview === true));
                     if (img.preview === true) {
-                        console.log("useEffect setting mainImage to the old ways!");
                         setMainImage(img.url);
                     } else if (img.url.length) {
                         secondaryImages.push(img.url);
@@ -121,7 +113,6 @@ function CreateSpot () {
 
     // Create HandleSubmit function & dispatch 
     const handlesubmit = async (e) => {
-        console.log("handlesubmit -- top of function")
         e.preventDefault();
 
         setLat(88);
@@ -145,21 +136,6 @@ function CreateSpot () {
             lng
         }
 
-        // trying out json object 
-        // const priceFloat = parseFloat(price);
-        // const spotJSON = {
-        //     "ownerId": `${currentUser.id}`,
-        //     "address": `${address}`,
-        //     "city": `${city}`,
-        //     "state": `${state}`,
-        //     "country": `${country}`,
-        //     "name": `${name}`,
-        //     "description": `${description}`,
-        //     "price": priceFloat,
-        //     "lat": lat,
-        //     "lng": lng
-        // }
-
         // create object holding spot images 
         const spotImages = {
             spotImageOne,
@@ -168,17 +144,12 @@ function CreateSpot () {
             spotImageFour
         }
 
-        console.log("handlesubmit -- spot and img obj declared");
         // IF CREATE
         // dispatch spot object, main image, and image object to createASpot thunk 
         if (!isEdit) {
-            console.log("handlesubmit --- inside the !isEdit clause ---");
-            console.log("newSpot obj = ", newSpot);
 
-    
             // const createdSpot = await 
             dispatch(createASpot(newSpot, mainImage, spotImages)).then((createdSpot) => {
-                console.log("~ handleSubmit ~ C.A.S. dispatch is returning: ", createdSpot);
                 if (createdSpot.id) navigate(`/spots/${createdSpot.id}`);
                 else alert("sorry, that didn't work!");
             })
@@ -188,10 +159,7 @@ function CreateSpot () {
         // IF UPDATE 
         // dispatch spot object, main image, and image object to updateASpot thunk 
         if (isEdit) {
-            console.log("hitting the isEdit path!!!");
-            console.log("handlesub ~ mainImage = ", mainImage);
             dispatch(updateASpot(newSpot, id, mainImage, spotImages)).then((createdSpot) => {
-                console.log("~ handleSubmit ~ update dispatch is returning: ", createdSpot);
                 navigate(`/spots/${createdSpot.id}`);
             });
         }

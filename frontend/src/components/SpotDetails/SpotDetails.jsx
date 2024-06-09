@@ -11,12 +11,10 @@ import DeleteReviewModal from '../DeleteReviewModal/DeleteReviewModal';
 
 // HELPER FUNCTION FOR FORMATTING AVG RATING 
 function reviewText (avgRating, numReviews) {
-    console.log("calling reviewText helper --");
     let string = '';
     let reviews = 'reviews'
 
     if (!avgRating || !numReviews) {
-        // console.log("review helper ~ something is undefined");
         string = 'loading...';
     }
     // change reviews to review if there is only one 
@@ -30,7 +28,6 @@ function reviewText (avgRating, numReviews) {
         let intRating = parseFloat(avgRating);
         let fixedRating = intRating.toFixed(1);
         string = `${fixedRating}  ·  ${numReviews} ${reviews}`;
-        console.log(string);
     } else {
         string = 'New';
     }
@@ -43,7 +40,6 @@ function reviewText (avgRating, numReviews) {
 function SpotDetails () {
     const dispatch = useDispatch();
     const { spotId } = useParams();
-    // console.log("~SpotDetails ~ spotId from useParams: ", spotId);
     const spotState = useSelector((state) => state.spots.spot);
     const currentUser = useSelector((state) => state.session.user);
     // create a "loaded" state 
@@ -51,12 +47,10 @@ function SpotDetails () {
 
     // GET SPOTS & GET REVIEWS 
     useEffect(() => {
-        console.log("spotDetails component ~ useEffect executing...");
         dispatch(getSpotDetails(spotId)).then(()=> {
-            console.log(".then func calling - dispatch to reviews thunk");
             dispatch(getAllReviewsThunk(spotId));
         });
-    }, [dispatch]);
+    }, [dispatch, spotId]);
 
     // CLOSE CIRCUIT WHEN SPOT POPULATED
     useEffect(() => {
@@ -89,10 +83,8 @@ function SpotDetails () {
     // REVIEWS 
     // dispatch to reviews thunk / create reviews slice of state
     const reviewsState = useSelector((state) => Object.values(state.reviews));
-    console.log("~SpotDetails ~ reviewsState: ", reviewsState)
     // create an array of reviews, re-order them oldest to newest (.reverse()?)
     const reviewsArr = [...reviewsState].reverse();
-    console.log("reviewsArr: ", reviewsArr);
 
     // DATE FORMATTING HELPER 
     const months = [

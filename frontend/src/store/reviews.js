@@ -28,14 +28,11 @@ export const deleteReview = (reviewId) => ({
 
  // GET All Reviews Thunk 
  export const getAllReviewsThunk = (spotId) => async (dispatch) => {
-    console.log("entering G.A.Reviews thunk- - - ");
     try {
         const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
 
         if (response.ok) {
-            console.log("review fetch = res.ok!")
             const reviews = await response.json();
-            console.log("get reviews response object: ", reviews);
             dispatch(getReviews(reviews));
             return reviews;
         } else {
@@ -57,7 +54,6 @@ export const deleteReview = (reviewId) => ({
         });
 
         if (res.ok) {
-            console.log("post review fetch = res.ok");
             const data = await res.json();
             dispatch(createReview(data));
             return data;
@@ -72,21 +68,19 @@ export const deleteReview = (reviewId) => ({
 
  // DELETE Review Thunk 
  export const deleteReviewThunk = (reviewId) => async (dispatch) => {
-    console.log("entering delete thunk review");
     try {
         const res = await csrfFetch(`/api/reviews/${reviewId}`, {
             method: 'DELETE'
         });
 
         if (res.ok) {
-            console.log("rev delete fetch = res.ok");
             dispatch(deleteReview(reviewId));
         } else {
             throw new Error("delete fetch failed");
         }
 
     } catch (err) {
-        console.log("catching following error in rev. delete fetch: ", err);
+        console.log("catching following error in review delete fetch: ", err);
         return err;
     }
  }

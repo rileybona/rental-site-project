@@ -11,16 +11,11 @@ const DeleteSpotModal = ({ spotId }) => {
     const { closeModal } = useModal();
 
     const handleDelete = async (e) => {
-        console.log("running handleDelete!")
         e.preventDefault();
 
-  
         // dispatching to delete
-        console.log("dispatching to delete");
         dispatch(deleteASpot(spotId))
-   
-
-        
+        // dispatch to gSBCU
         dispatch(getSpotsByCurrentUser())   
         closeModal()
         window.location.reload();

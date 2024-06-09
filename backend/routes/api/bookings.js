@@ -148,16 +148,13 @@ router.put('/:bookingId', requireAuth, async (req, res, next) => {
 
         let start = booking.startDate;
          start = new Date(start).getTime();
-         // console.log(start);
          let end = booking.endDate;
          end = new Date(end).getTime();
           let st = new Date(startDate).getTime();
-          // console.log(st);
           let en = new Date(endDate).getTime();
 
          // check start conflict
           if (st >= start && st <= end) {
-            //  console.log(" start date conflict recognized! ");
              errors.startDate = "Start date conflicts with an existing booking";
              bookingErr.errors = errors;
              bookingErr.status = 403;
